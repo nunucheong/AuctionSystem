@@ -1,5 +1,4 @@
-package auctionsystem;
-
+package biddingstack;
 import java.util.ArrayList;
 import javafx.util.Pair;
 
