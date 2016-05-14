@@ -7,7 +7,7 @@ public class Item {
     protected String itemName;
     protected String itemDescription;
     protected double itemPrice;
-    proteced Auction auctionType;
+    protected Auction auctionType;
     
     public Item(){
         
