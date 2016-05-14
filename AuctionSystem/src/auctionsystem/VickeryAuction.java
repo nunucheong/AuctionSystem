@@ -1,4 +1,4 @@
-package biddingstack;
+package auctionsystem;
 
 import java.util.Date;
 import javafx.util.Pair;

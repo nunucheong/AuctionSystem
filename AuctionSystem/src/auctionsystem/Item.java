@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package assignmente;
-
+package auctionsystem;
 /**
  *
  * @author Hanyang
@@ -13,7 +7,7 @@ public class Item {
     protected String itemName;
     protected String itemDescription;
     protected double itemPrice;
-    protected Auction auctionType;
+    proteced Auction auctionType;
     
     public Item(){
         

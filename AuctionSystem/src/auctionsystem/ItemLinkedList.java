@@ -1,4 +1,4 @@
-package itemlinkedlist;
+package auctionsystem;
 
 import javafx.util.Pair;
 

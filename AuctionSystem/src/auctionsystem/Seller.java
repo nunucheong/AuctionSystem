@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package assignmente;
+package auctionsystem;
+
 import java.util.ArrayList;
 /**
  *
@@ -26,12 +22,7 @@ public class Seller extends User {
     public void addItem(String itemName,double itemPrice,String itemDescription,Auction auctionType){
         itemList.add(new Item(itemName,itemPrice,itemDescription,auctionType));
     }
-    public void displayList(){
-        int count = this.itemList.size();
-        for(int i = 0; i<this.itemList.size();i++){
-            System.out.println(this.itemList.get(i));
-        }
-    }
+    
    
 //    public void editSellerItem(int number){
 //        
