@@ -18,7 +18,7 @@ public class AuctionSystem {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String username;
+        /*String username;
         Scanner sc = new Scanner (System.in);
         boolean runProgram = true;
         mainMenu: 
@@ -66,7 +66,9 @@ public class AuctionSystem {
                 default:
                     System.out.println("Wrong input. Please choose again: ");
             }  
-        }
+        }*/
+        
+        AuctionSystem.onGoingAuction();
     }
     
     public static void createAccount(){
@@ -99,7 +101,6 @@ public class AuctionSystem {
                     }
                 }
             }
-            
         }catch(IOException e){
             System.out.println("User profile not found.");
         }
@@ -129,35 +130,39 @@ public class AuctionSystem {
                         break;
                     }
                     i++;
-                    
                 }
                 count++;
             }
-            
         }catch (IOException e){
             System.out.println("User id not found.");
         }
         return count;    
     }    
     
-    public static void checkAvailableAuction(){
+    public static void onGoingAuction(){
         Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd/MM/yyyy");            //date format can change according to whole system date format
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");       //date format can change according to whole system date format
         System.out.println("Today's date : " + simpleFormat.format(current));
-        ArrayList availAuction=new ArrayList();
+        
         try{
-            String [] split=new String[30];
-            Scanner input=new Scanner(new FileInputStream("d:/AuctionSystem.txt"));   //just replace the correct text file
+            String [] itemData=new String[30];
+            String [] hold=new String[30];
+            Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));          //just replace the correct text file
+            System.out.print("Available Auction(s): \nItem Name \tItem Price\t\tItem Description\t\tAuction Start Time\tAuction End Time\tAuction Type");
             while(input.hasNextLine()){
                 String read=input.nextLine();
-                split=read.split(",");                                                //change the appropriate separate-character
+                itemData=read.split(",");                                                //change the appropriate separate-character
                 
-                Date endTime=simpleFormat.parse(split[2]);                            //convert String into Date
-                
-                if(current.before(endTime))
-                    availAuction.add(split[0]);                                       // split[0] , I assume item name is in first place
+                Date startTime=simpleFormat.parse(itemData[3]);
+                Date endTime=simpleFormat.parse(itemData[4]);                            //convert String into Date
+
+                if(current.before(endTime)&&current.after(startTime)){
+                    hold = itemData;                                           // split[0] , I assume item name is in first place
+                }
+                System.out.print("\n"+hold[0]+"\t\t"+hold[1]+"\t\t\t"+hold[2]+"\t\t\t"+hold[3]+"\t"+hold[4]+"\t"+hold[5]);
             }
-            System.out.println("Available Auction(s): "+availAuction.toString());     // this availAuction arraylist will only show available item to bid.
+                    // this availAuction arraylist will only show available item to bid.
+            
             input.close();
         }
         catch(FileNotFoundException e){
