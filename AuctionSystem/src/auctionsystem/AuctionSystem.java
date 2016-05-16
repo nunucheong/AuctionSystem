@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
+import javafx.util.Pair;
 /**
  *
  * @author User
@@ -146,18 +147,18 @@ public class AuctionSystem {
         
         ArrayList<Item> sellerItemList = new ArrayList<>();
         for(String hold : userData[7].split(":")){
-            sellerItemList.add(itemList.getItem(itemList.indexOfItem(hold)));
+            sellerItemList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue());
         }
         User seller = new Seller (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(), sellerItemList); 
         
         ArrayList<Item> bidderBiddingList = new ArrayList<>();
         for(String hold : userData[8].split(":")){
-            bidderBiddingList.add(itemList.getItem(itemList.indexOfItem(hold)));
+            bidderBiddingList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue());
         }
         
         ArrayList<Item> bidderSuccessList = new ArrayList<>();
         for(String hold : userData[9].split(":")){
-            bidderSuccessList.add(itemList.getItem(itemList.indexOfItem(hold)));
+            bidderSuccessList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue());
         }
         return userData;
     }

@@ -22,14 +22,13 @@ public class LogIn {
     
     //empty constructor
     public LogIn(){
-        
     }
         
-    //prompt user for attempt to sign in and get the value 
+    public LogIn(String username){
+        this.username = username;
+    }
+    
     public void userLogIn(){
-        System.out.println("\n====== Log In ======");
-        System.out.print("Please enter your username: ");
-        username = sc.nextLine();
         System.out.print("Please enter your password: ");
         password = sc.nextLine();
     }
@@ -37,7 +36,7 @@ public class LogIn {
     //check whether the database file exists else create one
     public void databaseCheck(){
         try{
-            Scanner inputstream = new Scanner (new FileInputStream("userdatabase.txt"));
+            Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             inputstream.close();
         } catch (FileNotFoundException e){
             databaseCreate();
@@ -47,7 +46,7 @@ public class LogIn {
     //create the database
     public void databaseCreate(){
         try{
-            PrintWriter createDatabase = new PrintWriter (new FileOutputStream ("userdatabase.txt"));
+            PrintWriter createDatabase = new PrintWriter (new FileOutputStream ("database/userdatabase.txt"));
             createDatabase.close();
         } catch (IOException e){
             System.out.println("Database is not created.");
@@ -58,7 +57,7 @@ public class LogIn {
     public int checkDatabaseLines(){
         int i = 0;
         try{
-            Scanner inputstream = new Scanner (new FileInputStream("userdatabase.txt"));
+            Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             while (inputstream.hasNextLine()){
                 inputstream.nextLine();
                 i++;
@@ -72,7 +71,7 @@ public class LogIn {
     //checking whether the username exists
     public void checkUsername(){
         try{
-            Scanner inputstream2 = new Scanner (new FileInputStream("userdatabase.txt"));
+            Scanner inputstream2 = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
             //array usernamecheck can be made public in cases if other classes were to access it, makes stuff easier in some cases but the implementation is still under consideration
             String [] usernamecheck = new String [checkDatabaseLines()];
@@ -103,7 +102,7 @@ public class LogIn {
     //more lines should be added if it consists of multiple users
     public void checkPassword(){
         try{
-            Scanner inputstream = new Scanner (new FileInputStream("userdatabase.txt"));
+            Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 1;
             String passwordcheck;
             while (inputstream.hasNextLine()){
