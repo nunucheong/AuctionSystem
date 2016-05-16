@@ -28,7 +28,7 @@ public class SignUp {
     //check whether database file exists else create
     public void databaseCheck(){
         try{
-            Scanner inputstream = new Scanner (new FileInputStream("userdatabase.txt"));
+            Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             inputstream.close();
         } catch (FileNotFoundException e){
             databaseCreate();
@@ -38,7 +38,7 @@ public class SignUp {
     //create the database
     public void databaseCreate(){
         try{
-            PrintWriter createDatabase = new PrintWriter (new FileOutputStream ("userdatabase.txt"));
+            PrintWriter createDatabase = new PrintWriter (new FileOutputStream ("database/userdatabase.txt"));
             createDatabase.close();
         } catch (IOException e){
             System.out.println("Database is not created.");
@@ -49,7 +49,7 @@ public class SignUp {
     public int checkDatabaseLines(){
         int i = 0;
         try{
-            Scanner inputstream = new Scanner (new FileInputStream("userdatabase.txt"));
+            Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             while (inputstream.hasNextLine()){
                 inputstream.nextLine();
                 i++;
@@ -69,7 +69,7 @@ public class SignUp {
     //check existing username in the database to ensure there is no overlapping else prompt user to input again
     public void checkExistingUserId(){
         try{
-            Scanner inputstream = new Scanner (new FileInputStream("userdatabase.txt"));
+            Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
             String [] usernamecheck = new String [checkDatabaseLines()];
             while (inputstream.hasNextLine()){
@@ -116,7 +116,7 @@ public class SignUp {
     //adds the new username and password into userdatabase.txt
     public void addUserAccount(){
         try{
-            PrintWriter inputstream = new PrintWriter (new FileOutputStream ("userdatabase.txt",true));
+            PrintWriter inputstream = new PrintWriter (new FileOutputStream ("database/userdatabase.txt",true));
             inputstream.println(newUserId+","+newPassword+","+newName+","+newIc+","+newPayment+","+newAddress+","+newPhoneNo);
             inputstream.close();
         } catch (IOException e){
@@ -145,7 +145,6 @@ public class SignUp {
             this.newAddress = sc.nextLine();
             System.out.print("Phone Number: ");
             this.newPhoneNo = sc.nextLine();
-            User newUser = new User(newName, newIc, newPayment, newAddress, newPhoneNo);
             addUserAccount();
         }
     }
