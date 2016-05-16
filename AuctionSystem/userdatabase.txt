@@ -1,4 +1,0 @@
-userId,password,name,ic,payment,address,phone,ItemList:itemNameA:itemNameB:itemNameC,SuccessBidList:itemNameA:itemNameB,BiddingList:itemNameA:itemNameB
-z,1,wang zhong qi,960222,paypal,a306 kk8,2886064
-z2,2,wang,960222,paypal,a306 kk8,2886064
-z3,3,zhong,96,web,a333,6064

@@ -10,7 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Date;
 /**
  *
  * @author User
@@ -21,7 +23,7 @@ public class AuctionSystem {
      */
     public static String username;
     User user;
-    
+    ItemLinkedList<Date,Item> itemList;
     public static void main(String[] args) {
         AuctionSystem system = new AuctionSystem();
         Scanner sc = new Scanner (System.in);
@@ -30,7 +32,12 @@ public class AuctionSystem {
         
         startProgram: 
         while (runProgram){
-            System.out.println("====== Main Menu ======");
+            System.out.println("\nWelcome to Watching Euuuuu ( ͡° ͜ʖ ͡°) Auction System!");
+            System.out.println("(\\____/)"); 
+            System.out.println("( ͡° ͜ʖ ͡°)");
+            System.out.println("\\ >    \\ >");
+
+            System.out.println("\n====== Main Menu ======");
             System.out.print("1. Log in\n2. Sign up\n3. Exit system\nPlease choose: ");
             String choice = sc.nextLine();
             
@@ -41,58 +48,60 @@ public class AuctionSystem {
                     System.out.println("\n====== Log In ======");
                     System.out.print("Please enter your username: ");
                     username = sc.nextLine();
-                    
                     logStatus = system.logIn(username);
                     logIn:
                     while(logStatus){
                         //create new user object
                         system.readUserProfile(username);
-                        String choice2 = system.selectModeMenu();
-                        
                         boolean selectMode = true;
                         mode:
                         while (selectMode){
+                            String choice2 = system.selectModeMenu();
                             switch(choice2){
-                            //Enter seller mode
-                            case "1":
-                            system.createSeller();
-                            //Enter bidder mode
-                            case "2":
+                                //Enter seller mode
+                                case "1":
+                                system.createSeller();
+                                //Enter bidder mode
+                                case "2":
                             
-                            //allow user to manage profile
-                            case "3":
-                                boolean profileManage = true;
-                                while(profileManage){
-                                    profileManage = system.accessProfile();
-                                }
-                            //Log out system back to main menu    
-                            case "4":
-                                logStatus = false;
+                                //allow user to manage profile
+                                case "3":
+                                    boolean manageProfile = true;
+                                    while(manageProfile){
+                                    manageProfile = system.accessProfile();
+                                    }
+                                    break;
                                 
-                            //remove account    
-                            case "5":
+                                //Log out system back to main menu    
+                                case "4":
+                                    logStatus = false;
+                                    break logIn;
                                 
-                                break;
-                                
-                                
+                                //remove account    
+                                case "5":
+                                    system.removeAccount(username);
+                                    System.out.println("Your account is removed successfully. Thank you for using our auction system.");
+                                    break logIn;
+                                    
+                                default:
+                                    System.out.println("Invalid input. Please enter again: ");  
+                                    break;
+                            }
                         }
-                            
-                        }
-                        
-                        
-                        
-                    }
-                        
-                break;          
+                    }  
+                    break;          
                 
                 case "2":
                     system.createAccount();
+                    break;
                 
                 case "3":
                     runProgram = false;
+                    break;
                 
                 default:
                     System.out.println("Wrong input. Please choose again: ");
+                    break;
             }  
         }
     }
@@ -138,18 +147,32 @@ public class AuctionSystem {
                     }
                 }
             }
-            
         }catch(IOException e){
             System.out.println("User profile not found.");
         }
         user = new User(userData[2], userData[3], userData[4], userData[5], userData[6]);
-        return userData;
         
+        ArrayList<Item> sellerItemList = new ArrayList<>();
+        for(String hold : userData[7].split(":")){
+            sellerItemList.add(itemList.getItem(itemList.indexOfItem(hold)));
+        }
+        User seller = new Seller (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(), sellerItemList); 
+        
+        ArrayList<Item> bidderBiddingList = new ArrayList<>();
+        for(String hold : userData[8].split(":")){
+            bidderBiddingList.add(itemList.getItem(itemList.indexOfItem(hold)));
+        }
+        
+        ArrayList<Item> bidderSuccessList = new ArrayList<>();
+        for(String hold : userData[9].split(":")){
+            bidderSucceddList.add(itemList.getItem(itemList.indexOfItem(hold)));
+        }
+        return userData;
     }
     
     //constructor to be amend
     public void createSeller(){
-        User seller = new Seller (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone()); 
+       
     }
     
     //constructor to be amend
@@ -167,18 +190,18 @@ public class AuctionSystem {
     }
     
     public boolean accessProfile(){
-        boolean flag = true;
+        boolean manageProfile = true;
         Scanner sc = new Scanner (System.in);
-        while(flag){
-            System.out.println("====== Profile Management ======");
-            System.out.print("1. View Profile\n2. Edit Profile\n3. Back to previous menu\nPlease choose: ");
-            String choice = sc.nextLine();
+        System.out.println("\n====== Profile Management ======");
+        System.out.print("1. View Profile\n2. Edit Profile\n3. Back to previous menu\nPlease choose: ");
+        String choice = sc.nextLine();
+            test:
             switch(choice){
                 case "1":
                     displayProfile();
-                    flag = true;
+                    manageProfile = true;
                     break;
-            
+                    
                 case "2":
                     boolean edit = true;
                     while(edit){
@@ -188,17 +211,17 @@ public class AuctionSystem {
                     edit = editor(choice2); 
                     }
                     saveEditedProfile(checkUserIdPosition(username));
-                    flag = true;
+                    manageProfile = true;
                     break;
                 
                 case "3":
-                    flag = false;
+                    manageProfile = false;
+                    break;
                     
+                default:
+                    System.out.println("Invalid input. Please enter again: ");     
             }
-            
-        }
-        
-        return flag;
+            return manageProfile;
     }
     
     public boolean editor(String choice){
@@ -246,9 +269,7 @@ public class AuctionSystem {
         }
         return edit;
     }
-    
-    
-        
+ 
     public int checkDatabaseLines(){
         int i = 0;
         try{
@@ -264,9 +285,7 @@ public class AuctionSystem {
     }
     
     public int checkUserIdPosition(String userId){
-        
         int count = 1;
-        
         try{
             Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
@@ -284,7 +303,6 @@ public class AuctionSystem {
                 }
                 count++;
             }
-            
         }catch (IOException e){
             System.out.println("User id not found.");
         }
@@ -294,7 +312,7 @@ public class AuctionSystem {
     public void saveEditedProfile(int delete){
         String deleted=null;
         try{
-            File temp = new File("temp.txt");
+            File temp = new File("database/temp.txt");
             File read = new File("database/userdatabase.txt");
             PrintWriter write = new PrintWriter (new FileOutputStream(temp));
             Scanner inputstream = new Scanner (new FileInputStream(read));
@@ -316,16 +334,18 @@ public class AuctionSystem {
             System.gc();
             
             read.setWritable(true);
-            if (!read.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
+            read.delete();
+//            if (!read.delete()) {
+//                System.out.println("Could not delete file");
+//                return;
+//            }
+            temp.renameTo(read);
 
             //Rename the new file to the filename the original file had.
-            if (!temp.renameTo(read)){
-                    System.out.println("Could not rename file");
-
-            }
+//            if (!temp.renameTo(read)){
+//                    System.out.println("Could not rename file");
+//
+//            }
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
         }
@@ -345,14 +365,13 @@ public class AuctionSystem {
             inputstream.close();
         } catch (IOException e){
             System.out.println("Cannot create record");
-        }   
-    
+        }
     }
     
     public void removeAccount(String userId){
         int delete = checkUserIdPosition(userId);
         try{
-            File temp = new File("temp.txt");
+            File temp = new File("database/temp.txt");
             File read = new File("database/userdatabase.txt");
             PrintWriter write = new PrintWriter (new FileOutputStream(temp));
             Scanner inputstream = new Scanner (new FileInputStream(read));
@@ -376,18 +395,12 @@ public class AuctionSystem {
                 System.out.println("Could not delete file");
                 return;
             }
-
             //Rename the new file to the filename the original file had.
             if (!temp.renameTo(read)){
                     System.out.println("Could not rename file");
-
             }
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
         }
     }
-    
-    
-    
-    
 }
