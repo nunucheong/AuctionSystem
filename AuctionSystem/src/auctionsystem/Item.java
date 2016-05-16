@@ -42,6 +42,7 @@ public class Item {
     public String getDescription(){
         return this.itemDescription;
     }
+
    
     public void write(){        
         try{
@@ -59,21 +60,15 @@ public class Item {
     }
     
     public void read(){
+        int i = 0;
         try{
-            Scanner read = new Scanner(new FileInputStream("Auction.txt"));
-            while(read.hasNextLine()){
-                String copy = read.nextLine();
-                String[] array = copy.split("[,;]");
-                this.itemName = array[0];
-                this.itemPrice = Double.parseDouble(array[1]);
-                this.itemDescription = array[2];
-                
-            }
+            PrintWriter input = new PrintWriter(new FileOutputStream(".txt"));
+            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.bidStack.bidderList.get(i)+this.auctionType.bidStack.bidPriceList.get(i)+","+this.auctionType.getClass().getName());
             
-            
-            
-        }catch(FileNotFoundException a){
-            System.out.println("File was not found!");
+            i++;
+        }catch(IOException e){
+            System.out.println("Problem with file output!");
         }
+        
     }
 }
