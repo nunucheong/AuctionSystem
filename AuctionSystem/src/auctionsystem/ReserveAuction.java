@@ -22,6 +22,7 @@ public class ReserveAuction extends Auction {
         AuctionType = RESERVE_AUCTION;
     }
     
+    
     public void setReservePrice(double reserve){
         this.reservePrice = reserve;
     }
