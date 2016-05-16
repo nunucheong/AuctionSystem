@@ -2,7 +2,6 @@ package auctionsystem;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import jdk.nashorn.internal.codegen.CompilerConstants;
 /**
  *
  * @author Hanyang
@@ -41,10 +40,12 @@ public class Item {
         return this.itemDescription;
     }
     public void write(){
-        
+        int i = 0;
         try{
             PrintWriter input = new PrintWriter(new FileOutputStream(".txt"));
-            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.startPrice);
+            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.bidStack.bidderList.get(i)+this.auctionType.bidStack.bidPriceList.get(i)+","+this.auctionType.getClass().getName());
+            
+            i++;
         }catch(IOException e){
             System.out.println("Problem with file output!");
         }
