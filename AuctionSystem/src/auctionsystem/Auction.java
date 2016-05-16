@@ -10,8 +10,14 @@ public class Auction {
     private double startPrice;
     private double highestBid;
     protected BiddingStack<Double,Bidder> bidStack;
+    protected String AuctionType;
     Date startTime;
     Date endTime;
+    protected final String ENGLISH_AUCTION = "EnglishAuction";
+    protected final String BLIND_AUCTION = "BlindAuction";
+    protected final String JAPANESE_AUCTION = "JapaneseAuction";
+    protected final String RESERVE_AUCTION = "ReserveAuction";
+    protected final String VICKERY_AUCTION = "VickeryAuction";
 
 	public Auction(){
             //not sure about the constructer yet

@@ -43,6 +43,20 @@ public class Item {
         return this.itemDescription;
     }
    
+    public void write(){        
+        try{
+            PrintWriter input = new PrintWriter(new FileOutputStream(".txt"));
+            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.AuctionType+",");
+            int i = 0;
+            while(!this.auctionType.bidStack.isEmpty(this.auctionType.bidStack.bidderList)){
+                input.printf(this.auctionType.bidStack.bidderList.get(i)+";"+this.auctionType.bidStack.bidPriceList.get(i)+";");
+                i++;
+            }
+            input.close();
+        }catch(IOException e){
+            System.out.println("Problem with file output!");
+        }
+    }
     
     public void read(){
         try{

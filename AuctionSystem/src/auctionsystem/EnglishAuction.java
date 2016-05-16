@@ -9,15 +9,17 @@ public class EnglishAuction extends Auction {
     private double minExceed;
     
     public EnglishAuction(){}
-
+    
     public EnglishAuction(double startPrice, Date startTime, Date endTime, double minExceed){
         super(startPrice, startTime, endTime);
         this.minExceed = minExceed;
+        AuctionType = ENGLISH_AUCTION;
     }
 
     public EnglishAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime, double minExceed){
 	super( startPrice, bidStack, startTime, endTime);
 	this.minExceed = minExceed;
+        AuctionType = ENGLISH_AUCTION;
     }
     
     public void setMinExceed(double min){
