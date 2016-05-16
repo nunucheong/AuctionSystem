@@ -2,6 +2,9 @@ package auctionsystem;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 /**
  *
  * @author Hanyang
@@ -40,16 +43,29 @@ public class Item {
         return this.itemDescription;
     }
 
+   
     public void write(){        
         try{
             PrintWriter input = new PrintWriter(new FileOutputStream(".txt"));
             input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.AuctionType+",");
             int i = 0;
             while(!this.auctionType.bidStack.isEmpty(this.auctionType.bidStack.bidderList)){
-            	input.printf(this.auctionType.bidStack.bidderList.get(i)+";"+this.auctionType.bidStack.bidPriceList.get(i)+";");
+                input.printf(this.auctionType.bidStack.bidderList.get(i)+";"+this.auctionType.bidStack.bidPriceList.get(i)+";");
                 i++;
             }
             input.close();
+        }catch(IOException e){
+            System.out.println("Problem with file output!");
+        }
+    }
+    
+    public void read(){
+        int i = 0;
+        try{
+            PrintWriter input = new PrintWriter(new FileOutputStream(".txt"));
+            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.bidStack.bidderList.get(i)+this.auctionType.bidStack.bidPriceList.get(i)+","+this.auctionType.getClass().getName());
+            
+            i++;
         }catch(IOException e){
             System.out.println("Problem with file output!");
         }
