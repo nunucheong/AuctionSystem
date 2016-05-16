@@ -150,12 +150,12 @@ public class ItemLinkedList<T,E> {
     }
     
     //not sure the use of this 
-    public int indexOfItem(E item){
+    public int indexOfItem(String name){
         int index = 1;
         boolean found = false;
         Node current = head;
         while(!found && current!=null){
-            if (item.equals(current.item))
+            if (name.equals(current.item.toString()))
                 found = true;
             index++;
             current = current.next;

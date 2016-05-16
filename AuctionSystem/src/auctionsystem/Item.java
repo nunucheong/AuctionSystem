@@ -44,7 +44,9 @@ public class Item {
     public String getDescription(){
         return this.itemDescription;
     }
-
+    public String toString(){
+        return getName();
+    }
    
     public void write(){        
         try{
