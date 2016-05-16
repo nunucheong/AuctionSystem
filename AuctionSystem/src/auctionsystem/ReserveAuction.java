@@ -1,4 +1,4 @@
-package biddingstack;
+package auctionsystem;
 import java.util.Date;
 
 /**
@@ -13,11 +13,13 @@ public class ReserveAuction extends Auction {
     public ReserveAuction(double startPrice, Date startTime, Date endTime, double reservePrice){
         super(startPrice, startTime, endTime);
         this.reservePrice = reservePrice;
+        AuctionType = RESERVE_AUCTION;
     }
     
      public ReserveAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime, double reservePrice){
 	super( startPrice, bidStack, startTime, endTime);
 	this.reservePrice = reservePrice;
+        AuctionType = RESERVE_AUCTION;
     }
     
     public void setReservePrice(double reserve){

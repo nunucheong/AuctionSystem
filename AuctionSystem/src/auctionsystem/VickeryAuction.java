@@ -1,4 +1,4 @@
-package biddingstack;
+package auctionsystem;
 
 import java.util.Date;
 import javafx.util.Pair;
@@ -14,10 +14,12 @@ public class VickeryAuction extends Auction {
     
     public VickeryAuction(double startPrice, Date startTime, Date endTime){
         super(startPrice, startTime, endTime);
+        AuctionType = VICKERY_AUCTION;
     }
     
     public VickeryAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime){
 	super( startPrice, bidStack, startTime, endTime);
+        AuctionType = VICKERY_AUCTION;
     }
     
     public void setBidCount(int bidCounter){

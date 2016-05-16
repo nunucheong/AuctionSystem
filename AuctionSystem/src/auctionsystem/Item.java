@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package assignmente;
-
+package auctionsystem;
+import java.io.PrintWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
 /**
  *
  * @author Hanyang
@@ -42,10 +39,20 @@ public class Item {
     public String getDescription(){
         return this.itemDescription;
     }
-    
-//    public void display(){
-//        System.out.println("Item's name       : "+this.item_name);
-//        System.out.println("Item's price      : "+this.item_price);
-//        System.out.println("Item's description: "+this.item_description);
-//    }
+
+    public void write(){        
+        try{
+            PrintWriter input = new PrintWriter(new FileOutputStream(".txt"));
+            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.AuctionType+",");
+            int i = 0;
+            while(!this.auctionType.bidStack.isEmpty(this.auctionType.bidStack.bidderList)){
+            	input.printf(this.auctionType.bidStack.bidderList.get(i)+";"+this.auctionType.bidStack.bidPriceList.get(i)+";");
+                i++;
+            }
+            input.close();
+        }catch(IOException e){
+            System.out.println("Problem with file output!");
+        }
+        
+    }
 }

@@ -1,4 +1,4 @@
-package biddingstack;
+package auctionsystem;
 import java.util.Date;
 
 /**
@@ -14,11 +14,13 @@ public class JapaneseAuction extends Auction {
     public JapaneseAuction(double startPrice, Date startTime, Date endTime, double minExceed){
         super(startPrice, startTime, endTime);
         this.minExceed = minExceed;
+        AuctionType = JAPANESE_AUCTION;
     }
 
     public JapaneseAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime, double minExceed){
 	super( startPrice, bidStack, startTime, endTime);
 	this.minExceed = minExceed;
+        AuctionType = JAPANESE_AUCTION;
     }
     
     public void setMinExceed(double min){
