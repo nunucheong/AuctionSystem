@@ -10,10 +10,12 @@ public class BlindAuction extends Auction {
     
     public BlindAuction(double startPrice, Date startTime, Date endTime){
         super(startPrice, startTime, endTime);
+        AuctionType = BLIND_AUCTION;
     }
     
     public BlindAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime){
 	super( startPrice, bidStack, startTime, endTime);
+        AuctionType = BLIND_AUCTION;
     }
     
     @Override
