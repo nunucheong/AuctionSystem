@@ -10,52 +10,45 @@ public class AuctionSystem {
     public static void main(String[] args) {
         AuctionSystem.checkAvailableAuction();
     }
+    
     public static void checkAvailableAuction(){
         Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd/MM/yyyy");            //date format can change according to whole system date format
         System.out.println("Today's date : " + simpleFormat.format(current));
-        ArrayList availAuc=new ArrayList();
+        ArrayList availAuction=new ArrayList();
         try{
             String [] split=new String[30];
-            Scanner input=new Scanner(new FileInputStream("d:/AuctionSystem.txt"));
+            Scanner input=new Scanner(new FileInputStream("d:/AuctionSystem.txt"));   //just replace the correct text file
             while(input.hasNextLine()){
                 String read=input.nextLine();
-                split=read.split(",");
+                split=read.split(",");                                                //change the appropriate separate-character
                 
-                Date endTime=simpleFormat.parse(split[2]); //convert String into Date.
+                Date endTime=simpleFormat.parse(split[2]);                            //convert String into Date
                 
                 if(current.before(endTime))
-                    availAuc.add(split[0]); //i assume item name is in first place
+                    availAuction.add(split[0]);                                       // split[0] , I assume item name is in first place
             }
-            System.out.println("Available Auction(s): "+availAuc.toString());
+            System.out.println("Available Auction(s): "+availAuction.toString());     // this availAuction arraylist will only show available item to bid.
             input.close();
         }
         catch(FileNotFoundException e){
             e.getMessage();
         }
         catch(ParseException e){
-            e.printStackTrace();
         }
     }
     
-    public void setBidderCall(Date biddingTime, Double biddingAmount, String itemID,Bidder bidder){
-        BiddingStack<Double,Bidder> bid=new BiddingStack<>(); //??
-        bid.push(biddingAmount, bidder);
+    public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
+        item.auctionType.bidStack.push(biddingAmount, bidder);      // how to do with the biddingTime?
     }
     
-    public void displayCallingPrice(){
-        BiddingStack<Double,Bidder> bid=new BiddingStack<>();
-        System.out.println(bid.toString());
-        //OR  
-        try{
-            Scanner input=new Scanner(new FileInputStream("d:/AuctionSystem.txt"));
-            while(input.hasNextLine()){
-                String read=input.nextLine();
-            }
-           /*....................*/
-        } 
-        catch(FileNotFoundException e){
-            e.getMessage();
+    public void displayCallingPrice(Item item){
+        ArrayList<Double>holdPrice=item.auctionType.bidStack.bidPriceList;
+        ArrayList<Bidder>holdBidder=item.auctionType.bidStack.bidderList;
+        
+        for(int i=0;i<holdPrice.size()&&i<holdBidder.size();i++){
+            System.out.print("Calling Price : RM"+holdPrice.get(i));            //is this output method okay?
+            System.out.println(" by " + holdBidder.get(i));
         }
     }
 }
