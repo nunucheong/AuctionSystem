@@ -2,6 +2,9 @@ package auctionsystem;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 /**
  *
  * @author Hanyang
@@ -39,16 +42,24 @@ public class Item {
     public String getDescription(){
         return this.itemDescription;
     }
-    public void write(){
-        int i = 0;
+   
+    
+    public void read(){
         try{
-            PrintWriter input = new PrintWriter(new FileOutputStream(".txt"));
-            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.bidStack.bidderList.get(i)+this.auctionType.bidStack.bidPriceList.get(i)+","+this.auctionType.getClass().getName());
+            Scanner read = new Scanner(new FileInputStream("Auction.txt"));
+            while(read.hasNextLine()){
+                String copy = read.nextLine();
+                String[] array = copy.split("[,;]");
+                this.itemName = array[0];
+                this.itemPrice = Double.parseDouble(array[1]);
+                this.itemDescription = array[2];
+                
+            }
             
-            i++;
-        }catch(IOException e){
-            System.out.println("Problem with file output!");
+            
+            
+        }catch(FileNotFoundException a){
+            System.out.println("File was not found!");
         }
-        
     }
 }
