@@ -66,4 +66,15 @@ public class Auction {
             else
                 System.out.println("The auction is ended. ");
 	}
+        
+        public String bidderStatus(Bidder bidder){
+            int freq=bidder.bidFreq;
+            String status;
+            if(freq>=1&&freq<=10)
+                status="Newbie";
+            else if(freq>=11&&freq<=20)
+                status="Intermediate";
+            else status="Pro";
+            return status;
+        }
 }

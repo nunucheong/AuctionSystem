@@ -13,6 +13,7 @@ import java.util.Scanner;
  * @author User
  */
 public class AuctionSystem {
+    SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     
     /**
      * @param args the command line arguments
@@ -46,13 +47,8 @@ public class AuctionSystem {
                             case "5":
                                 runProgram = false;
                                 break;
-                                
-                                
                         }
-                        
                     }
-                        
-                            
                     break mainMenu;
                 
                 case "2":
@@ -68,7 +64,7 @@ public class AuctionSystem {
             }  
         }*/
         
-        AuctionSystem.onGoingAuction();
+        //AuctionSystem.onGoingAuction();
     }
     
     public static void createAccount(){
@@ -137,31 +133,45 @@ public class AuctionSystem {
             System.out.println("User id not found.");
         }
         return count;    
-    }    
+    }
     
-    public static void onGoingAuction(){
-        Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");       //date format can change according to whole system date format
-        System.out.println("Today's date : " + simpleFormat.format(current));
+    public static String calcTab(String s){
+        if(s.length()<8)
+            return s+"\t\t\t";
+        else if(s.length()>8&&s.length()<16)
+            return s+"\t\t\t";
+        else if(s.length()>16&&s.length()<24)
+            return s+"\t\t";
+        else if(s.length()>24&&s.length()<32)
+            return s+"\t";
+        else return s+"\t";
+    }
+    
+    public void onGoingAuction(){
+        /*Date current=new Date();
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        System.out.println("Today's date : " + simpleFormat.format(current));*/
+        
+        getTime();
         
         try{
+            
             String [] itemData=new String[30];
             String [] hold=new String[30];
-            Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));          //just replace the correct text file
-            System.out.print("Available Auction(s): \nItem Name \tItem Price\t\tItem Description\t\tAuction Start Time\tAuction End Time\tAuction Type");
+            Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));
+            System.out.print("Available Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
             while(input.hasNextLine()){
                 String read=input.nextLine();
-                itemData=read.split(",");                                                //change the appropriate separate-character
+                itemData=read.split(",");
                 
                 Date startTime=simpleFormat.parse(itemData[3]);
-                Date endTime=simpleFormat.parse(itemData[4]);                            //convert String into Date
+                Date endTime=simpleFormat.parse(itemData[4]);//convert String into Date
 
-                if(current.before(endTime)&&current.after(startTime)){
-                    hold = itemData;                                           // split[0] , I assume item name is in first place
+                if(getTime().before(endTime)&&getTime().after(startTime)){
+                    hold = itemData;
                 }
-                System.out.print("\n"+hold[0]+"\t\t"+hold[1]+"\t\t\t"+hold[2]+"\t\t\t"+hold[3]+"\t"+hold[4]+"\t"+hold[5]);
+                System.out.println(calcTab(hold[0])+calcTab(hold[1])+calcTab(hold[2])+calcTab(hold[3])+calcTab(hold[4])+calcTab(hold[5]));
             }
-                    // this availAuction arraylist will only show available item to bid.
             
             input.close();
         }
@@ -172,8 +182,15 @@ public class AuctionSystem {
         }
     }
     
+    public Date getTime(){ //get current time
+        Date current=new Date();
+        System.out.println("Today's date : " + simpleFormat.format(current));
+        return current;
+    }
+    
     public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
-        item.auctionType.bidStack.push(biddingAmount, bidder);      // how to do with the biddingTime?
+        item.auctionType.bidStack.push(biddingAmount, bidder);
+        bidder.bidFrequence++;
     }
     
     public void displayCallingPrice(Item item){
@@ -181,8 +198,23 @@ public class AuctionSystem {
         ArrayList<Bidder>holdBidder=item.auctionType.bidStack.bidderList;
         
         for(int i=0;i<holdPrice.size()&&i<holdBidder.size();i++){
-            System.out.print("Calling Price : RM"+holdPrice.get(i));            //is this output method okay?
+            System.out.print("Calling Price : RM"+holdPrice.get(i));
             System.out.println(" by " + holdBidder.get(i));
         }
+    }
+    
+    public void sortNameASC(){
+        try{
+            Scanner scan=new Scanner(new FileInputStream("userdatabase.txt"));
+            
+        }
+        catch(FileNotFoundException e){
+            e.getMessage();
+        }
+    }
+    
+    public void BidderMode(){
+        User bidder=new Bidder();
+        System.out.println("Bidder Menu: \n1.View Purchase History.\n2.View Ongoing Auction.\n");
     }
 }
