@@ -11,8 +11,7 @@ import java.util.Scanner;
 import javafx.util.Pair;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 /**
  *
  * @author User
@@ -59,15 +58,20 @@ public class AuctionSystem {
                         while (selectMode){
                             String choice2 = system.selectModeMenu();
                             switch(choice2){
-                                /*Enter seller mode
-                                 1. Create New Item for sale
-                                 2. Check All Auction
-                                 3. Check Ended Auction
-                                 4. Check Ongoing Auction*/
-                                case "1":                                
+                                //Enter seller mode
+                                case "1":      
+                                    boolean sellerMode = true;
+                                    while(sellerMode){
+                                        sellerMode = system.sellerMode();
+                                    }
+                                    break;
                                 //Enter bidder mode
                                 case "2":
-                            
+                                    boolean bidderMode = true;
+                                    while(bidderMode){
+                                        
+                                    }
+                                    break;
                                 //allow user to manage profile
                                 case "3":
                                     boolean manageProfile = true;
@@ -88,8 +92,7 @@ public class AuctionSystem {
                                     break logIn;
                                     
                                 default:
-                                    System.out.println("Invalid input. Please enter again: ");  
-                                    break;
+                                    System.out.print("Invalid input. Please enter again: ");
                             }
                         }
                     }  
@@ -104,8 +107,7 @@ public class AuctionSystem {
                     break;
                 
                 default:
-                    System.out.println("Wrong input. Please choose again: ");
-                    break;
+                    System.out.print("Invalid input. Please enter again: ");
             }  
         }
     }
@@ -261,6 +263,9 @@ public class AuctionSystem {
             case "6":
                 edit = false;
                 break;
+                
+            default:
+                System.out.print("Invalid input. Please enter again: ");
         }
         return edit;
     }
@@ -410,6 +415,53 @@ public class AuctionSystem {
         itemList.add(i, date, item);  
     }
     
+    public boolean sellerMode(){
+        boolean continueMode = true;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n====== Seller Mode ======");
+        System.out.print("1. Add new item to sell\n2. Check all item\n3. Check ongoing auction\n4. Check sold item\n5. Exit seller mode\nPlease choose: ");
+        String choice = sc.nextLine();
+        switch(choice){
+            case "1":
+                createNewItem();
+                break;
+                
+            case "2":
+                break;
+                
+            case "3":
+                break;
+                
+            case "4":
+                break;
+                
+            case "5":
+                continueMode = false;
+                break;
+                
+            default:
+                System.out.print("Invalid input. Please enter again: ");
+                
+        }
+        return continueMode;
+    }
+    
+    public void checkSellerAllItem(){
+        ArrayList<String> allItem = new ArrayList<>();
+        
+        
+    }
+    
+    public void displayList(ArrayList<String> list){
+        Date currentDate = new Date();
+        System.out.println("Current Time: "+dateformat.format(currentDate));
+        System.out.println("All Auction: ");
+        System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
+        for(int i = 1; i<list.size()+1; i++){
+            System.out.println(calcTab(list.get(i)));
+        }
+    }
+    
     public void createNewItem(){
         Scanner sc = new Scanner(System.in);
         System.out.println("\n====== Create New Item ======");
@@ -463,8 +515,7 @@ public class AuctionSystem {
                 break;
                 
             default:
-                System.out.println("Invalid input. Please enter again.");
-                break;
+                System.out.print("Invalid input. Please enter again: ");
         }
         try {
             checkItemLocation(dateformat.parse(startTime), new Item(itemName, itemPrice, itemDescription, newAuction));
@@ -475,12 +526,12 @@ public class AuctionSystem {
     
     public static void checkAvailableAuction(){
         Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd/MM/yyyy");            //date format can change according to whole system date format
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");            //date format can change according to whole system date format
         System.out.println("Today's date : " + simpleFormat.format(current));
         ArrayList availAuction=new ArrayList();
         try{
             String [] split=new String[30];
-            Scanner input=new Scanner(new FileInputStream("d:/AuctionSystem.txt"));   //just replace the correct text file
+            Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));   //just replace the correct text file
             while(input.hasNextLine()){
                 String read=input.nextLine();
                 split=read.split(",");                                                //change the appropriate separate-character
