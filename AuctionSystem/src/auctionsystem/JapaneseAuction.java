@@ -17,7 +17,7 @@ public class JapaneseAuction extends Auction {
         AuctionType = JAPANESE_AUCTION;
     }
 
-    public JapaneseAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime, double minExceed){
+    public JapaneseAuction(double startPrice, BiddingStack<Double,Bidder, Date> bidStack, Date startTime, Date endTime, double minExceed){
 	super( startPrice, bidStack, startTime, endTime);
 	this.minExceed = minExceed;
         AuctionType = JAPANESE_AUCTION;
@@ -41,7 +41,7 @@ public class JapaneseAuction extends Auction {
                 if(currentTime.after(startTime)){
                     if(bid.compareTo(getHighestBid())>0){
                         if((bid-getHighestBid())>=minExceed){
-                            bidStack.push(bid, bidder);
+                            bidStack.push(bid, bidder, currentTime);
                         }
                         else
                             System.out.println("You bid does not reach the minimum amount by which the next bid must exceed the current highest bid.");

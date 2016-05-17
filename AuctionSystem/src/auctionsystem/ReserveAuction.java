@@ -16,7 +16,7 @@ public class ReserveAuction extends Auction {
         AuctionType = RESERVE_AUCTION;
     }
     
-     public ReserveAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime, double reservePrice){
+     public ReserveAuction(double startPrice, BiddingStack<Double,Bidder, Date> bidStack, Date startTime, Date endTime, double reservePrice){
 	super( startPrice, bidStack, startTime, endTime);
 	this.reservePrice = reservePrice;
         AuctionType = RESERVE_AUCTION;
