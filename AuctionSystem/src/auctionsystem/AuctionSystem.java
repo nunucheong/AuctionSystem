@@ -475,7 +475,7 @@ public class AuctionSystem {
     
     public static void checkAvailableAuction(){
         Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd/MM/yyyy");            //date format can change according to whole system date format
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-M-yyyy hh:mm:ss");            //date format can change according to whole system date format
         System.out.println("Today's date : " + simpleFormat.format(current));
         ArrayList availAuction=new ArrayList();
         try{
@@ -500,8 +500,10 @@ public class AuctionSystem {
         }
     }
     
+    
     public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
-        item.auctionType.bidStack.push(biddingAmount, bidder,biddingTime);      // how to do with the biddingTime?
+        item.auctionType.bidStack.push(biddingAmount, bidder,biddingTime);
+        bidder.addBidFrequency();
     }
     
     public void displayCallingPrice(Item item){
@@ -636,4 +638,27 @@ public class AuctionSystem {
             System.out.println("Error Parsing!");
         }
     }
+     
+     public String bidderStatus(Bidder bidder){
+        int freq = bidder.getBidFrequency();
+        String status;
+            
+        if(freq>=1&&freq<=10)
+            status="Newbie";
+            
+        else if(freq>=11&&freq<=20)
+            status="Intermediate";
+            
+        else status="Pro";
+            
+        return status;
+    }
+    
+    public static String formatTime(){
+        Date current=new Date();
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        String currentTime=simpleFormat.format(current);
+        return currentTime;
+    }
+  
 }

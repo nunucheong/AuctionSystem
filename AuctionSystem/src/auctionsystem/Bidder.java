@@ -9,6 +9,7 @@ public class Bidder extends User{
     ArrayList<String> successBidList=new ArrayList();
     ArrayList<String> biddingList=new ArrayList();
     private int bidFrequency;
+    
     public Bidder(){
         
     }
@@ -21,6 +22,10 @@ public class Bidder extends User{
         this.biddingList = bidList;
         this.successBidList = success;
         this.bidFrequency = bidFrequency;
+    }
+    
+    public void addBidFrequency(){
+        bidFrequency++;
     }
     
     public int getBidFrequency(){
