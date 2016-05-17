@@ -1,1 +1,0 @@
-userId,password,name,ic,payment,address,phone,ItemList:itemNameA:itemNameB:itemNameC,BiddingList:itemNameA:itemNameB,SuccessBidList:itemNameA:itemNameB,bidCount

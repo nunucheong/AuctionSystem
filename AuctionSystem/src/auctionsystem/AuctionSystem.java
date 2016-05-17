@@ -53,11 +53,7 @@ public class AuctionSystem {
                         while (selectMode){
                             String choice2 = system.selectModeMenu();
                             switch(choice2){
-                                /*Enter seller mode
-                                 1. Create New Item for sale
-                                 2. Check All Auction
-                                 3. Check Ended Auction
-                                 4. Check Ongoing Auction*/
+                                //Enter seller mode
                                 case "1":                                
                                 //Enter bidder mode
                                 case "2":
@@ -129,7 +125,7 @@ public class AuctionSystem {
     
     //read user profile from userdatabase.txt and create new object<User>
     public String[] readUserProfile(String userId){
-        String[] userData = new String[11]; 
+        String[] userData = new String[10]; 
         try{
             Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
@@ -165,7 +161,7 @@ public class AuctionSystem {
         for(String hold : userData[9].split(":")){
             bidderSuccessList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue().getName());
         }
-        bidder = new Bidder (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(),Integer.parseInt(userData[10]),bidderBiddingList,bidderSuccessList); 
+        bidder = new Bidder (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(),bidderBiddingList,bidderSuccessList); 
         return userData;
     }
     
@@ -339,7 +335,7 @@ public class AuctionSystem {
             System.out.println("Error writing to temporary file.");
         }
         
-        String[] userData = new String[11];
+        String[] userData = new String[10];
         int count = 0;
             for(String hold : deleted.split(",")){
                 userData[count] = hold;
@@ -391,25 +387,6 @@ public class AuctionSystem {
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
         }
-    }
-    
-    public void createNewItem(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\n====== Create New Item ======");
-        System.out.print("Please fill in the item details.\n\nName: ");
-        String itemName = sc.nextLine();
-        System.out.print("\nDescription [not more than 30 characters]: ");
-        String itemDescription = sc.nextLine();
-        System.out.print("\nAuction type: \n1. English Auction\n2. Blind Auction\n3. Vickery Auction\n4. Reserve Auction\nChoose: ");
-        String choice = sc.nextLine();
-        System.out.print("\nAuction start time [dd-mm-yyyy hh:mm:ss]: ");
-        String startTime = sc.nextLine();
-        System.out.print("\nAuction end time [dd-mm-yyyy hh:mm:ss]");
-        String endTime = sc.nextLine();
-        
-        
-        
-        
     }
     
     public static void checkAvailableAuction(){
