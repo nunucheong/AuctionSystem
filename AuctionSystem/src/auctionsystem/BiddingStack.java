@@ -1,7 +1,6 @@
 package auctionsystem;
 
 import java.util.ArrayList;
-import javafx.util.Pair;
 
 /**
  *
@@ -9,9 +8,10 @@ import javafx.util.Pair;
  * @param <E>
  * @param <F>
  */
-public class BiddingStack<E,F>{
+public class BiddingStack<E,F,T>{
     ArrayList<E>bidPriceList=new ArrayList<>();
     ArrayList<F>bidderList=new ArrayList<>();
+    ArrayList<T>bidTimeList = new ArrayList<>();
     
     public BiddingStack(){}
     
@@ -19,23 +19,27 @@ public class BiddingStack<E,F>{
         return list.size();
     }
     
-    public Pair<E,F> peek(){
+    public Triplet<E,F,T> peek(){
         E bidPrice = bidPriceList.get(getSize(bidPriceList)-1);
         F bidder = bidderList.get(getSize(bidderList)-1);
-        return new Pair<>(bidPrice,bidder);
+        T bidTime = bidTimeList.get(getSize(bidTimeList)-1);
+        return new Triplet<>(bidPrice,bidder,bidTime);
     } 
     
-    public Pair<E,F> pop(){
+    public Triplet<E,F,T> pop(){
         E bidPrice = bidPriceList.get(getSize(bidPriceList)-1);
         F bidder = bidderList.get(getSize(bidderList)-1);
+        T bidTime = bidTimeList.get(getSize(bidTimeList)-1);
         bidPriceList.remove(getSize(bidPriceList)-1);
         bidderList.remove(getSize(bidderList)-1);
-        return new Pair<>(bidPrice,bidder);
+        bidTimeList.remove(getSize(bidTimeList)-1);
+        return new Triplet<>(bidPrice,bidder,bidTime);
     }
     
-    public void push(E e, F f){
+    public void push(E e, F f, T t){
         bidPriceList.add(e);
         bidderList.add(f);
+        bidTimeList.add(t);
     }
     
     public boolean isEmpty(ArrayList list){ //change from isEmpty() to isEmpty(ArrayList list)
@@ -44,7 +48,7 @@ public class BiddingStack<E,F>{
     
     @Override
     public String toString(){
-        return "Bid Price List: "+bidPriceList.toString()+"\nBidder List: "+bidderList.toString();
+        return "Bid Price List: "+bidPriceList.toString()+"\nBidder List: "+bidderList.toString() + "\nBidding Time List: " + bidTimeList.toString();
     }
     
     

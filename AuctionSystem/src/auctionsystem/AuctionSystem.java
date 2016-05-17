@@ -417,7 +417,7 @@ public class AuctionSystem {
     }
     
     public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
-        item.auctionType.bidStack.push(biddingAmount, bidder);      // how to do with the biddingTime?
+        item.auctionType.bidStack.push(biddingAmount, bidder,biddingTime);      // how to do with the biddingTime?
     }
     
     public void displayCallingPrice(Item item){
@@ -427,6 +427,129 @@ public class AuctionSystem {
         for(int i=0;i<holdPrice.size()&&i<holdBidder.size();i++){
             System.out.print("Calling Price : RM"+holdPrice.get(i));            //is this output method okay?
             System.out.println(" by " + holdBidder.get(i));
+        }
+    }
+    
+    public void sortDateAsc(){
+            int x = checkDatabaseLines();
+            String[]name = new String[x];
+            double[]price = new double[x];
+            String[]description = new String[x];
+            Date[]startTime = new Date[x];
+            Date[]endTime = new Date[x];
+            String[]auction = new String[x];
+            String[]copyFromText = new String[6];
+            int counter2 = 0;
+        try{
+        
+            Scanner input = new Scanner(new FileInputStream("itemdatabase.txt"));
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+            while(input.hasNextLine()){
+                String copy = input.nextLine();
+                int counter1 = 0;
+                for(String rekt : copy.split(",")){
+                    copyFromText[counter1] = rekt;
+                    counter1++;
+                }
+                   name[counter2]=copyFromText[0];
+                   price[counter2]=Double.parseDouble(copyFromText[1]);
+                   description[counter2]=copyFromText[2];
+                   startTime[counter2]=formatter.parse(copyFromText[3]);
+                   endTime[counter2]=formatter.parse(copyFromText[4]);
+                   auction[counter2]=copyFromText[5];
+                   counter2++;
+                
+            }
+             for(int i=0;i<startTime.length-1;i++){
+                 for(int j=i+1;j<startTime.length;j++){
+                     if(startTime[i].after(startTime[j])){
+                         String hold = name[i];
+                         name[i] = name[j];
+                         name[j] = hold;
+                         double hold1 = price[i];
+                         price[i] = price[j];
+                         price[j] = hold1;
+                         String hold2 = description[i];
+                         description[i] = description[j];
+                         description[j] = hold2;
+                         Date hold3 = startTime[i];
+                         startTime[i] = startTime[j];
+                         startTime[j] = hold3;
+                         Date hold4 = endTime[i];
+                         endTime[i] = endTime[j];
+                         endTime[j] = hold4;
+                         String hold5 = auction[i];
+                         auction[i] = auction[j];
+                         auction[j] = hold5;
+                     }
+                 }
+             }
+            
+        }catch(FileNotFoundException e){
+            System.out.println("File was not found!");
+        }catch(ParseException f){
+            System.out.println("Error Parsing!");
+        }
+    }
+     public void sortDateDsc(){
+            int x = checkDatabaseLines();
+            String[]name = new String[x];
+            double[]price = new double[x];
+            String[]description = new String[x];
+            Date[]startTime = new Date[x];
+            Date[]endTime = new Date[x];
+            String[]auction = new String[x];
+            String[]copyFromText = new String[6];
+            int counter2 = 0;
+        try{
+        
+            Scanner input = new Scanner(new FileInputStream("itemdatabase.txt"));
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+            while(input.hasNextLine()){
+                String copy = input.nextLine();
+                int counter1 = 0;
+                for(String rekt : copy.split(",")){
+                    copyFromText[counter1] = rekt;
+                    counter1++;
+                }
+                   name[counter2]=copyFromText[0];
+                   price[counter2]=Double.parseDouble(copyFromText[1]);
+                   description[counter2]=copyFromText[2];
+                   startTime[counter2]=formatter.parse(copyFromText[3]);
+                   endTime[counter2]=formatter.parse(copyFromText[4]);
+                   auction[counter2]=copyFromText[5];
+                   counter2++;
+                
+            }
+             for(int i=0;i<startTime.length-1;i++){
+                 for(int j=i+1;j<startTime.length;j++){
+                     if(startTime[i].before(startTime[j])){
+                         String hold = name[i];
+                         name[i] = name[j];
+                         name[j] = hold;
+                         double hold1 = price[i];
+                         price[i] = price[j];
+                         price[j] = hold1;
+                         String hold2 = description[i];
+                         description[i] = description[j];
+                         description[j] = hold2;
+                         Date hold3 = startTime[i];
+                         startTime[i] = startTime[j];
+                         startTime[j] = hold3;
+                         Date hold4 = endTime[i];
+                         endTime[i] = endTime[j];
+                         endTime[j] = hold4;
+                         String hold5 = auction[i];
+                         auction[i] = auction[j];
+                         auction[j] = hold5;
+                     }
+                 }
+             }
+            
+        }catch(FileNotFoundException e){
+            System.out.println("File was not found!");
+        }catch(ParseException f){
+            System.out.println("Error Parsing!");
         }
     }
 }

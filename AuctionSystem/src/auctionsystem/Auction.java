@@ -1,6 +1,5 @@
 package auctionsystem;
 import java.util.Date;
-import javafx.util.Pair;
 
 /**
  *
@@ -9,7 +8,7 @@ import javafx.util.Pair;
 public class Auction {
     private double startPrice;
     private double highestBid;
-    protected BiddingStack<Double,Bidder> bidStack;
+    protected BiddingStack<Double,Bidder, Date> bidStack;
     protected String AuctionType;
     Date startTime;
     Date endTime;
@@ -31,7 +30,7 @@ public class Auction {
 	}
 
 	//constructor 2 : for reading from text file
-	public Auction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime){
+	public Auction(double startPrice, BiddingStack<Double,Bidder,Date> bidStack, Date startTime, Date endTime){
             this.startPrice = startPrice;
             this.bidStack = bidStack;
             this.startTime = startTime;
@@ -47,7 +46,7 @@ public class Auction {
 	}
 
         public double getHighestBid(){
-            Pair<Double,Bidder> hold = this.bidStack.peek();
+            Triplet<Double,Bidder,Date> hold = this.bidStack.peek();
             return hold.getKey();
 	}
 
@@ -55,7 +54,7 @@ public class Auction {
             if(currentTime.before(endTime)){
                 if(currentTime.after(startTime)){
                     if(bid.compareTo(getHighestBid())>0){
-                        bidStack.push(bid, bidder);
+                        bidStack.push(bid, bidder,currentTime);
                     }
                     else
                         System.out.println("Your bidding price is lower than previous bid. ");
