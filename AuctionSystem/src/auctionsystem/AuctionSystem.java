@@ -9,6 +9,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
 import javafx.util.Pair;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author User
@@ -19,6 +23,8 @@ public class AuctionSystem {
     User seller;
     User bidder;
     ItemLinkedList<Date,Item> itemList;
+    Auction newAuction;
+    SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
     public static void main(String[] args) {
         AuctionSystem system = new AuctionSystem();
         Scanner sc = new Scanner (System.in);
@@ -53,7 +59,11 @@ public class AuctionSystem {
                         while (selectMode){
                             String choice2 = system.selectModeMenu();
                             switch(choice2){
-                                //Enter seller mode
+                                /*Enter seller mode
+                                 1. Create New Item for sale
+                                 2. Check All Auction
+                                 3. Check Ended Auction
+                                 4. Check Ongoing Auction*/
                                 case "1":                                
                                 //Enter bidder mode
                                 case "2":
@@ -125,7 +135,7 @@ public class AuctionSystem {
     
     //read user profile from userdatabase.txt and create new object<User>
     public String[] readUserProfile(String userId){
-        String[] userData = new String[10]; 
+        String[] userData = new String[11]; 
         try{
             Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
@@ -161,7 +171,7 @@ public class AuctionSystem {
         for(String hold : userData[9].split(":")){
             bidderSuccessList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue().getName());
         }
-        bidder = new Bidder (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(),bidderBiddingList,bidderSuccessList); 
+        bidder = new Bidder (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(),Integer.parseInt(userData[10]),bidderBiddingList,bidderSuccessList); 
         return userData;
     }
     
@@ -335,7 +345,7 @@ public class AuctionSystem {
             System.out.println("Error writing to temporary file.");
         }
         
-        String[] userData = new String[10];
+        String[] userData = new String[11];
         int count = 0;
             for(String hold : deleted.split(",")){
                 userData[count] = hold;
@@ -386,6 +396,80 @@ public class AuctionSystem {
             }
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
+        }
+    }
+    
+    public void checkItemLocation(Date date, Item item){
+        int i = 0;
+        Pair<Date,Item> hold = itemList.getItem(i);
+        while(hold!= null &&hold.getKey().after(date) && i < itemList.getEntry()){                
+            hold = itemList.getItem(i+1);
+            i++;
+        }
+        System.out.println(i+ " " +item.toString());
+        itemList.add(i, date, item);  
+    }
+    
+    public void createNewItem(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n====== Create New Item ======");
+        System.out.print("Please fill in the item details.\n\nName: ");
+        String itemName = sc.nextLine();
+        System.out.print("\nDescription [not more than 30 characters]: ");
+        String itemDescription = sc.nextLine();
+        System.out.print("\nPrice: RM");
+        double itemPrice = sc.nextDouble();
+        System.out.print("\nAuction start time [dd-mm-yyyy hh:mm:ss]: ");
+        String startTime = sc.nextLine();
+        System.out.print("\nAuction end time [dd-mm-yyyy hh:mm:ss]");
+        String endTime = sc.nextLine();
+        System.out.print("\nAuction type: \n1. English Auction\n2. Blind Auction\n3. Vickery Auction\n4. Reserve Auction\nChoose: ");
+        String choice = sc.nextLine();
+        switch(choice){
+            case "1":
+                System.out.print("\nMinimum exceed amount");
+                double minExceed = sc.nextDouble();
+                try{
+                    newAuction = new EnglishAuction (itemPrice, dateformat.parse(startTime), dateformat.parse(endTime), minExceed);
+                }catch (ParseException e){
+                    System.out.println("Error parsing.");
+                }
+                break;
+            
+            case "2":
+                try{
+                    newAuction = new BlindAuction (itemPrice, dateformat.parse(startTime), dateformat.parse(endTime));
+                }catch(ParseException e){
+                    System.out.println("Error parsing.");
+                }
+                break;
+                
+            case "3":
+                try{
+                    newAuction = new VickeryAuction (itemPrice, dateformat.parse(startTime), dateformat.parse(endTime));
+                }catch(ParseException e){
+                    System.out.println("Error parsing.");
+                }
+                break;
+                
+            case "4":
+                System.out.print("\nReserve price: ");
+                double reservePrice = sc.nextDouble();
+                try{
+                    newAuction = new ReserveAuction (itemPrice, dateformat.parse(startTime), dateformat.parse(endTime), reservePrice);
+                }catch(ParseException e){
+                    System.out.println("Error parsing.");
+                }
+                break;
+                
+            default:
+                System.out.println("Invalid input. Please enter again.");
+                break;
+        }
+        try {
+            checkItemLocation(dateformat.parse(startTime), new Item(itemName, itemPrice, itemDescription, newAuction));
+        } catch (ParseException e) {
+            System.out.println("Error parsing.");
         }
     }
     
