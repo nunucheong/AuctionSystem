@@ -16,6 +16,8 @@ import javafx.util.Pair;
 public class AuctionSystem {
     public static String username;
     User user;
+    User seller;
+    User bidder;
     ItemLinkedList<Date,Item> itemList;
     public static void main(String[] args) {
         AuctionSystem system = new AuctionSystem();
@@ -52,8 +54,7 @@ public class AuctionSystem {
                             String choice2 = system.selectModeMenu();
                             switch(choice2){
                                 //Enter seller mode
-                                case "1":
-                                system.createSeller();
+                                case "1":                                
                                 //Enter bidder mode
                                 case "2":
                             
@@ -149,28 +150,19 @@ public class AuctionSystem {
         for(String hold : userData[7].split(":")){
             sellerItemList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue());
         }
-        User seller = new Seller (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(), sellerItemList); 
+        seller = new Seller (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(), sellerItemList); 
         
-        ArrayList<Item> bidderBiddingList = new ArrayList<>();
+        ArrayList<String> bidderBiddingList = new ArrayList<>();
         for(String hold : userData[8].split(":")){
-            bidderBiddingList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue());
+            bidderBiddingList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue().getName());
         }
         
-        ArrayList<Item> bidderSuccessList = new ArrayList<>();
+        ArrayList<String> bidderSuccessList = new ArrayList<>();
         for(String hold : userData[9].split(":")){
-            bidderSuccessList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue());
+            bidderSuccessList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue().getName());
         }
+        bidder = new Bidder (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(),bidderBiddingList,bidderSuccessList); 
         return userData;
-    }
-    
-    //constructor to be amend
-    public void createSeller(){
-       
-    }
-    
-    //constructor to be amend
-    public void createBidder(){
-        User bidder = new Bidder (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone()); 
     }
     
     public void displayProfile(){
