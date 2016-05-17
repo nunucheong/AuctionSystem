@@ -79,7 +79,7 @@ public class Item {
                 this.auctionType.endTime = dateformat.parse(date2);
                 int i = 5;
                 while(i!=array.length-1){
-                this.auctionType.bidStack.bidderList.add(array[i]);
+                //this.auctionType.bidStack.bidderList.add(array[i]);
                 i++;
                 this.auctionType.bidStack.bidPriceList.add(Double.parseDouble(array[i]));
                 i++;

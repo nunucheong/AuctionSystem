@@ -117,7 +117,7 @@ public class SignUp {
     public void addUserAccount(){
         try{
             PrintWriter inputstream = new PrintWriter (new FileOutputStream ("database/userdatabase.txt",true));
-            inputstream.println(newUserId+","+newPassword+","+newName+","+newIc+","+newPayment+","+newAddress+","+newPhoneNo);
+            inputstream.println(newUserId+","+newPassword+","+newName+","+newIc+","+newPayment+","+newAddress+","+newPhoneNo+",null,null,null,0");
             inputstream.close();
         } catch (IOException e){
             System.out.println("Unable to create user account.");
@@ -139,7 +139,7 @@ public class SignUp {
             this.newName = sc.nextLine();
             System.out.print("IC Number: ");
             this.newIc = sc.nextLine();
-            System.out.print("Payment Method: (Paypal / Credit Card / Web Cash): ");
+            System.out.print("Payment Method [Paypal / Credit Card / Web Cash]: ");
             this.newPayment = sc.nextLine();
             System.out.print("Address: ");
             this.newAddress = sc.nextLine();
