@@ -13,7 +13,7 @@ public class BlindAuction extends Auction {
         AuctionType = BLIND_AUCTION;
     }
     
-    public BlindAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime){
+    public BlindAuction(double startPrice, BiddingStack<Double,Bidder,Date> bidStack, Date startTime, Date endTime){
 	super( startPrice, bidStack, startTime, endTime);
         AuctionType = BLIND_AUCTION;
     }
@@ -22,7 +22,7 @@ public class BlindAuction extends Auction {
     public void pushBid(Double bid, Date currentTime, Bidder bidder){
         if(bidCounter==1){
             if(currentTime.equals(endTime)){
-                bidStack.push(bid, bidder);
+                bidStack.push(bid, bidder, currentTime);
             }
         }
     }

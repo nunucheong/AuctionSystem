@@ -1,7 +1,7 @@
 package auctionsystem;
 
 import java.util.Date;
-import javafx.util.Pair;
+
 
 /**
  *
@@ -17,7 +17,7 @@ public class VickeryAuction extends Auction {
         AuctionType = VICKERY_AUCTION;
     }
     
-    public VickeryAuction(double startPrice, BiddingStack<Double,Bidder> bidStack, Date startTime, Date endTime){
+    public VickeryAuction(double startPrice, BiddingStack<Double,Bidder,Date> bidStack, Date startTime, Date endTime){
 	super( startPrice, bidStack, startTime, endTime);
         AuctionType = VICKERY_AUCTION;
     }
@@ -30,15 +30,15 @@ public class VickeryAuction extends Auction {
     public void pushBid(Double bid, Date currentTime, Bidder bidder){
         if(bidCounter==1){
             if(currentTime.equals(endTime)){
-                bidStack.push(bid, bidder);
+                bidStack.push(bid, bidder, currentTime);
             }
         }
     }
     
     public double getSecondHighestBid(){
-        Pair<Double, Bidder> hold = this.bidStack.pop();
-        Pair<Double, Bidder> secondBid = this.bidStack.peek();
-        this.bidStack.push(hold.getKey(), hold.getValue());
+        Triplet<Double, Bidder, Date> hold = this.bidStack.pop();
+        Triplet<Double, Bidder, Date> secondBid = this.bidStack.peek();
+        this.bidStack.push(hold.getKey(), hold.getValue(), hold.getThird());
         return secondBid.getKey();
     }
     
