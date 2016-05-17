@@ -13,7 +13,6 @@ import java.util.Scanner;
  * @author User
  */
 public class AuctionSystem {
-    SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     
     /**
      * @param args the command line arguments
@@ -63,8 +62,8 @@ public class AuctionSystem {
                     System.out.println("Wrong input. Please choose again: ");
             }  
         }*/
-        
-        //AuctionSystem.onGoingAuction();
+        AuctionSystem auc=new AuctionSystem();
+        auc.onGoingAuction();
     }
     
     public static void createAccount(){
@@ -108,11 +107,8 @@ public class AuctionSystem {
         System.out.println("Phone Number: " + userData[6]);
         
     }
-        
     public static int checkUserIdPosition(String userId){
-        
         int count = 1;
-        
         try{
             Scanner inputstream = new Scanner (new FileInputStream("userdatabase.txt"));
             int i = 0;
@@ -148,12 +144,9 @@ public class AuctionSystem {
     }
     
     public void onGoingAuction(){
-        /*Date current=new Date();
+        Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        System.out.println("Today's date : " + simpleFormat.format(current));*/
-        
-        getTime();
-        
+        System.out.println("Current Time: "+simpleFormat.format(current));
         try{
             
             String [] itemData=new String[30];
@@ -167,12 +160,11 @@ public class AuctionSystem {
                 Date startTime=simpleFormat.parse(itemData[3]);
                 Date endTime=simpleFormat.parse(itemData[4]);//convert String into Date
 
-                if(getTime().before(endTime)&&getTime().after(startTime)){
+                if(current.before(endTime)&&current.after(startTime)){
                     hold = itemData;
                 }
                 System.out.println(calcTab(hold[0])+calcTab(hold[1])+calcTab(hold[2])+calcTab(hold[3])+calcTab(hold[4])+calcTab(hold[5]));
             }
-            
             input.close();
         }
         catch(FileNotFoundException e){
@@ -182,15 +174,16 @@ public class AuctionSystem {
         }
     }
     
-    public Date getTime(){ //get current time
+    public static String formatTime(){
         Date current=new Date();
-        System.out.println("Today's date : " + simpleFormat.format(current));
-        return current;
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        String currentTime=simpleFormat.format(current);
+        return currentTime;
     }
     
     public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
         item.auctionType.bidStack.push(biddingAmount, bidder);
-        bidder.bidFrequence++;
+        bidder.bidFrequency++;
     }
     
     public void displayCallingPrice(Item item){
@@ -203,18 +196,49 @@ public class AuctionSystem {
         }
     }
     
-    public void sortNameASC(){
-        try{
-            Scanner scan=new Scanner(new FileInputStream("userdatabase.txt"));
+    public String bidderStatus(Bidder bidder){
+        int freq=bidder.bidFrequency;
+        String status;
             
+        if(freq>=1&&freq<=10)
+            status="Newbie";
+            
+        else if(freq>=11&&freq<=20)
+            status="Intermediate";
+            
+        else status="Pro";
+            
+        return status;
+    }
+    
+    public void displayBidderAllAuction(Bidder bidder){
+        
+        try{
+            String[] userData=new String[30];
+            String [] itemData=new String[30];
+            String [] holdUserItem=new String[30];
+            String[] holdItem=new String[30];
+            Scanner inputUserData=new Scanner(new FileInputStream("userdatabase.txt"));
+            Scanner inputItemData=new Scanner(new FileInputStream("itemdatabase.txt"));
+            System.out.print("Item You Have Bid: \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+            while(inputUserData.hasNextLine()){
+                String readUserData=inputUserData.nextLine();
+                userData=readUserData.split(",");
+                holdUserItem=userData[8].split(":");
+                
+                while(inputItemData.hasNextLine()){
+                    String readItemData=inputItemData.nextLine();
+                    itemData=readItemData.split(",");
+                    for(int i=0;i<holdUserItem.length;i++)
+                        if(holdUserItem[i].equalsIgnoreCase(itemData[0]))
+                            holdItem=itemData;
+                }
+                System.out.println((holdItem[0])+calcTab(holdItem[1])+calcTab(holdItem[2])+calcTab(holdItem[3])+calcTab(holdItem[4])+calcTab(holdItem[5]));
+            }
+            inputUserData.close();
         }
         catch(FileNotFoundException e){
             e.getMessage();
         }
-    }
-    
-    public void BidderMode(){
-        User bidder=new Bidder();
-        System.out.println("Bidder Menu: \n1.View Purchase History.\n2.View Ongoing Auction.\n");
     }
 }

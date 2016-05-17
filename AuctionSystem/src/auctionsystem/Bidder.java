@@ -8,12 +8,14 @@ import java.util.ArrayList;
 public class Bidder extends User{
     ArrayList<String> successBidList=new ArrayList();
     ArrayList<String> biddingList=new ArrayList();
+    int bidFrequency; //bid how many times
     
     public Bidder(){
         
     }
     public Bidder(String Name,String Ic, String PaymentType,String Address,String Phone){
         super(Name,Ic,PaymentType,Address,Phone);
+        bidFrequency=0;
     }
     public Bidder(String Name,String Ic, String PaymentType,String Address,String Phone,ArrayList<String> bidList,ArrayList<String> success){
         super(Name,Ic,PaymentType,Address,Phone);
@@ -21,4 +23,7 @@ public class Bidder extends User{
         this.successBidList = success;
     }
     
+    public int getBidFrequency(){
+        return bidFrequency;
+    }
 }

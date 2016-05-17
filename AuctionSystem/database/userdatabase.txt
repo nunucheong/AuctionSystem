@@ -1,0 +1,4 @@
+userId,password,name,ic,payment,address,phone,itemListNameA:itemListNameB:itemListNameC,biddingListItemA:biddingListItemB,successBidItemA:successBidItemB,bidFrequency
+z,1,wang zhong qi,960222,paypal,a306 kk8,2886064,null,null,null,0
+z3,3,zhong,96,web,a333,6064,null,null,null,0
+z2,2,wang,961231,Credit Card,a306 kk8,123456,null,null,null,0
