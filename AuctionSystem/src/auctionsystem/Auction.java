@@ -27,6 +27,7 @@ public class Auction {
             this.startPrice = startPrice;
             this.startTime = startTime;
             this.endTime = endTime;
+            bidStack = new BiddingStack<>();
 	}
 
 	//constructor 2 : for reading from text file
@@ -46,8 +47,12 @@ public class Auction {
 	}
 
         public double getHighestBid(){
-            Triplet<Double,Bidder,Date> hold = this.bidStack.peek();
-            return hold.getKey();
+            if(!bidStack.bidPriceList.isEmpty()){
+                Triplet<Double,Bidder,Date> hold = this.bidStack.peek();
+                return hold.getKey();
+            }
+            else 
+                return 0;
 	}
 
 	public void pushBid(Double bid, Date currentTime, Bidder bidder){
