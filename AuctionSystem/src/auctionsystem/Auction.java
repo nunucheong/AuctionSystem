@@ -55,6 +55,7 @@ public class Auction {
                 if(currentTime.after(startTime)){
                     if(bid.compareTo(getHighestBid())>0){
                         bidStack.push(bid, bidder,currentTime);
+                        bidder.addBidFrequency();
                     }
                     else
                         System.out.println("Your bidding price is lower than previous bid. ");

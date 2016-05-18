@@ -37,6 +37,7 @@ public class EnglishAuction extends Auction {
                     if(bid.compareTo(getHighestBid())>0){
                         if((bid-getHighestBid())>=minExceed){
                             bidStack.push(bid, bidder, currentTime);
+                            bidder.addBidFrequency();
                         }
                         else
                             System.out.println("You bid does not reach the minimum amount by which the next bid must exceed the current highest bid.");

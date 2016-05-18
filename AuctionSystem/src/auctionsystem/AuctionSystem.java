@@ -563,8 +563,18 @@ public class AuctionSystem {
     
     
     public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
-        item.auctionType.bidStack.push(biddingAmount, bidder,biddingTime);
-        bidder.addBidFrequency();
+        //English Auction 
+        if (item.auctionType.AuctionType.equals("EnglishAuction"))
+            ((EnglishAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+        //BlindAuction
+        else if (item.auctionType.AuctionType.equals("BlindAuction"))
+            ((BlindAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+        //ReserveAuction
+        else if (item.auctionType.AuctionType.equals("ReserveAuction"))
+            ((ReserveAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+        //VickeryAuction
+        else if (item.auctionType.AuctionType.equals("VickeryAuction"))
+            ((VickeryAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
     }
     
     public void displayCallingPrice(Item item){
@@ -726,8 +736,7 @@ public class AuctionSystem {
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("Current Time: "+simpleFormat.format(current));
-        try{
-            
+        try{            
             String [] itemData=new String[30];
             String [] hold=new String[30];
             Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));
