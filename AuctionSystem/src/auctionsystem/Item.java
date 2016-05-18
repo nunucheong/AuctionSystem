@@ -88,8 +88,6 @@ public class Item {
                 copyOfItem.addFirst(this.auctionType.startTime, this.itemName);
             }
             
-            
-            
         }catch(FileNotFoundException a){
             System.out.println("File was not found!");
         }catch(ParseException b){

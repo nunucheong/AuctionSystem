@@ -732,7 +732,7 @@ public class AuctionSystem {
         return currentTime;
     }
     
-    public void onGoingAuction(){
+    /*public void onGoingAuction(){
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("Current Time: "+simpleFormat.format(current));
@@ -760,8 +760,20 @@ public class AuctionSystem {
         }
         catch(ParseException e){
         }
+    }*/
+    
+    public void onGoingAuction(){
+        Item holdItem;
+        Date current=new Date();
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        System.out.println("Current Time: "+simpleFormat.format(current));
+        for(int i=0; i<itemList.getEntry();i++){
+            if(itemList.getItem(i).getKey().before(current)&&itemList.getItem(i).getValue().auctionType.endTime.after(current)){
+                holdItem=itemList.getItem(i).getValue();
+                System.out.printf("\n,\t\t,\t,t\t",holdItem.getName(),holdItem.getPrice(),holdItem.getDescription(),holdItem.getClass());
+            }
+        }
     }
-
 
     public String calcTab(String s){
         if(s.length()<8)
