@@ -660,5 +660,49 @@ public class AuctionSystem {
         String currentTime=simpleFormat.format(current);
         return currentTime;
     }
+    
+    public void onGoingAuction(){
+        Date current=new Date();
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        System.out.println("Current Time: "+simpleFormat.format(current));
+        try{
+            
+            String [] itemData=new String[30];
+            String [] hold=new String[30];
+            Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));
+            System.out.print("Available Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+            while(input.hasNextLine()){
+                String read=input.nextLine();
+                itemData=read.split(",");
+                
+                Date startTime=simpleFormat.parse(itemData[3]);
+                Date endTime=simpleFormat.parse(itemData[4]);//convert String into Date
+
+                if(current.before(endTime)&&current.after(startTime)){
+                    hold = itemData;
+                }
+                System.out.println(calcTab(hold[0])+calcTab(hold[1])+calcTab(hold[2])+calcTab(hold[3])+calcTab(hold[4])+calcTab(hold[5]));
+            }
+            input.close();
+        }
+        catch(FileNotFoundException e){
+            e.getMessage();
+        }
+        catch(ParseException e){
+        }
+    }
+
+
+    public String calcTab(String s){
+        if(s.length()<8)
+            return s+"\t\t\t";
+        else if(s.length()>8&&s.length()<16)
+            return s+"\t\t\t";
+        else if(s.length()>16&&s.length()<24)
+            return s+"\t\t";
+        else if(s.length()>24&&s.length()<32)
+            return s+"\t";
+        else return s+"\t";
+    }
   
 }
