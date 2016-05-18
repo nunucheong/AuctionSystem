@@ -23,6 +23,7 @@ public class BlindAuction extends Auction {
         if(bidCounter==1){
             if(currentTime.equals(endTime)){
                 bidStack.push(bid, bidder, currentTime);
+                bidder.addBidFrequency();
             }
         }
     }

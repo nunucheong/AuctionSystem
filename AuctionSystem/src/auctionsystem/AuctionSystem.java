@@ -11,8 +11,6 @@ import java.util.Scanner;
 import javafx.util.Pair;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author User
@@ -20,8 +18,8 @@ import java.util.logging.Logger;
 public class AuctionSystem {
     public static String username;
     User user;
-    User seller;
-    User bidder;
+    Seller seller;
+    Bidder bidder;
     ItemLinkedList<Date,Item> itemList;
     Auction newAuction;
     SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
@@ -59,15 +57,21 @@ public class AuctionSystem {
                         while (selectMode){
                             String choice2 = system.selectModeMenu();
                             switch(choice2){
-                                /*Enter seller mode
-                                 1. Create New Item for sale
-                                 2. Check All Auction
-                                 3. Check Ended Auction
-                                 4. Check Ongoing Auction*/
-                                case "1":                                
+                                //Enter seller mode
+                                case "1": 
+                                     boolean sellerMode = true;
+                                    while(sellerMode){
+                                        sellerMode = system.sellerMode();
+                                    }
+                                    break;
+                                    
                                 //Enter bidder mode
                                 case "2":
-                            
+                                    boolean bidderMode = true;
+                                    while(bidderMode){
+                                        
+                                    }
+                                    break;
                                 //allow user to manage profile
                                 case "3":
                                     boolean manageProfile = true;
@@ -399,7 +403,7 @@ public class AuctionSystem {
         }
     }
     
-    public void checkItemLocation(Date date, Item item){
+    public void addItem(Date date, Item item){
         int i = 0;
         Pair<Date,Item> hold = itemList.getItem(i);
         while(hold!= null &&hold.getKey().after(date) && i < itemList.getEntry()){                
@@ -408,6 +412,63 @@ public class AuctionSystem {
         }
         System.out.println(i+ " " +item.toString());
         itemList.add(i, date, item);  
+    }
+    
+    public boolean sellerMode(){
+        boolean continueMode = true;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n====== Seller Mode ======");
+        System.out.print("1. Add new item to sell\n2. Check all item\n3. Check ongoing auction\n4. Check sold item\n5. Exit seller mode\nPlease choose: ");
+        String choice = sc.nextLine();
+        switch(choice){
+            case "1":
+                createNewItem();
+                break;
+                
+            case "2":
+                break;
+                
+            case "3":
+                break;
+                
+            case "4":
+                break;
+                
+            case "5":
+                continueMode = false;
+                break;
+                
+            default:
+                System.out.print("Invalid input. Please enter again: ");
+                
+        }
+        return continueMode;
+    }
+    
+    public void accessSellerAllItem(){
+        ArrayList<Item> allItem = ((Seller)seller).itemList;
+        displayItemList(allItem);
+    }
+    
+    public void displayItemList(ArrayList<Item> list){
+        Date currentDate = new Date();
+        System.out.println("Current Time: " + dateformat.format(currentDate));
+        System.out.println("All auction: ");
+        System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
+        for(int i = 0; i<list.size(); i++){
+            Item item = list.get(i);
+            System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).startTime+"")+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType+""));
+        }
+    }
+    
+    //ask how to get information
+    public void displayStringList(ArrayList<String> list){
+        Date currentDate = new Date();
+        System.out.println("Current Time: "+dateformat.format(currentDate));
+        System.out.println("All Auction: ");
+        System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
+        for(int i = 0; i<list.size(); i++){
+        }
     }
     
     public void createNewItem(){
@@ -467,7 +528,7 @@ public class AuctionSystem {
                 break;
         }
         try {
-            checkItemLocation(dateformat.parse(startTime), new Item(itemName, itemPrice, itemDescription, newAuction));
+            addItem(dateformat.parse(startTime), new Item(itemName, itemPrice, itemDescription, newAuction));
         } catch (ParseException e) {
             System.out.println("Error parsing.");
         }
@@ -502,8 +563,18 @@ public class AuctionSystem {
     
     
     public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
-        item.auctionType.bidStack.push(biddingAmount, bidder,biddingTime);
-        bidder.addBidFrequency();
+        //English Auction 
+        if (item.auctionType.AuctionType.equals("EnglishAuction"))
+            ((EnglishAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+        //BlindAuction
+        else if (item.auctionType.AuctionType.equals("BlindAuction"))
+            ((BlindAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+        //ReserveAuction
+        else if (item.auctionType.AuctionType.equals("ReserveAuction"))
+            ((ReserveAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+        //VickeryAuction
+        else if (item.auctionType.AuctionType.equals("VickeryAuction"))
+            ((VickeryAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
     }
     
     public void displayCallingPrice(Item item){
@@ -665,8 +736,7 @@ public class AuctionSystem {
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("Current Time: "+simpleFormat.format(current));
-        try{
-            
+        try{            
             String [] itemData=new String[30];
             String [] hold=new String[30];
             Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));
