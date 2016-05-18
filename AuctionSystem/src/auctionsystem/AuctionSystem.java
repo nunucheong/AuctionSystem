@@ -426,12 +426,15 @@ public class AuctionSystem {
                 break;
                 
             case "2":
+                accessSellerAllItem();
                 break;
                 
             case "3":
+                accessSellerOngoingItem();
                 break;
                 
             case "4":
+                accessSellerEndedItem();
                 break;
                 
             case "5":
@@ -446,8 +449,30 @@ public class AuctionSystem {
     }
     
     public void accessSellerAllItem(){
-        ArrayList<Item> allItem = ((Seller)seller).itemList;
+        ArrayList<Item> allItem = seller.itemList;
         displayItemList(allItem);
+    }
+    
+    public void accessSellerOngoingItem(){
+        ArrayList<Item> hold = new ArrayList<>();
+        Date currentDate = new Date();
+        for(int i = 0; i<seller.itemList.size(); i++){
+            Item item = seller.itemList.get(i);
+            if(currentDate.after((item.auctionType).startTime) && currentDate.before((item.auctionType).endTime))
+                hold.add(item);
+        }
+        displayItemList(hold);
+    }
+    
+    public void accessSellerEndedItem(){
+        ArrayList<Item> hold = new ArrayList<>();
+        Date currentDate = new Date();
+        for(int i = 0; i<seller.itemList.size(); i++){
+            Item item = seller.itemList.get(i);
+            if(currentDate.after((item.auctionType).endTime))
+                hold.add(item);
+        }
+        displayItemList(hold);
     }
     
     public void displayItemList(ArrayList<Item> list){
