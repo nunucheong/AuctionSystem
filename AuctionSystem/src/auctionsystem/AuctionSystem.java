@@ -48,6 +48,8 @@ public class AuctionSystem {
                     System.out.print("Please enter your username: ");
                     username = sc.nextLine();
                     logStatus = system.logIn(username);
+                    if(logStatus)                         
+                        System.out.println("Welcome back " + username);                              
                     logIn:
                     while(logStatus){
                         //create new user object
@@ -59,7 +61,7 @@ public class AuctionSystem {
                             switch(choice2){
                                 //Enter seller mode
                                 case "1": 
-                                     boolean sellerMode = true;
+                                    boolean sellerMode = true;
                                     while(sellerMode){
                                         sellerMode = system.sellerMode();
                                     }
@@ -188,6 +190,24 @@ public class AuctionSystem {
         System.out.println("5. Phone number: " + user.getPhone());
     }
     
+    public double sellerTotalIncome(){
+        double sum = 0;
+        for(int i = 0; i<seller.itemList.size(); i++){
+            sum += seller.itemList.get(i).getPrice();
+        }
+        return sum;
+    }
+    
+    public double bidderTotalPendingPayment(){
+        double sum = 0;
+        for(int i = 0; i<bidder.biddingList.size(); i++){
+            String itemName = bidder.biddingList.get(i);
+            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+            sum += item.getPrice();
+        }
+        return sum;
+    }
+    
     public boolean accessProfile(){
         boolean manageProfile = true;
         Scanner sc = new Scanner (System.in);
@@ -198,6 +218,8 @@ public class AuctionSystem {
             switch(choice){
                 case "1":
                     displayProfile();
+                    System.out.println("6. Total income amount: " + sellerTotalIncome());
+                    System.out.println("7. Total pending payment: " + bidderTotalPendingPayment());
                     manageProfile = true;
                     break;
                     
@@ -355,8 +377,8 @@ public class AuctionSystem {
                 userData[count] = hold;
                 count++;
             }
-            
-        String record = userData[0] + "," + userData[1] + "," + user.getName() + "," + user.getIC() + "," + user.getPaymentType() + "," + user.getAddress() + "," + user.getPhone() + "," + userData[7] + "," + userData[8] + "," + userData[9];
+               
+        String record = userData[0] + "," + userData[1] + "," + user.getName() + "," + user.getIC() + "," + user.getPaymentType() + "," + user.getAddress() + "," + user.getPhone() + "," + userData + "," + userData[8] + "," + userData[9] + ",";
             
         try{
             PrintWriter inputstream = new PrintWriter (new FileOutputStream ("database/userdatabase.txt", true));
@@ -493,6 +515,9 @@ public class AuctionSystem {
         System.out.println("All Auction: ");
         System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
         for(int i = 0; i<list.size(); i++){
+            String itemName = list.get(i);
+           Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+           System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).startTime+"")+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType+""));
         }
     }
     
@@ -587,19 +612,26 @@ public class AuctionSystem {
     }
     
     
-    public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
+    public void setBidderCall(Item item, Date biddingTime, Double biddingAmount){
         //English Auction 
         if (item.auctionType.AuctionType.equals("EnglishAuction"))
-            ((EnglishAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+            ((EnglishAuction)item.auctionType).pushBid(biddingAmount, biddingTime, this.bidder);
         //BlindAuction
         else if (item.auctionType.AuctionType.equals("BlindAuction"))
-            ((BlindAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+            ((BlindAuction)item.auctionType).pushBid(biddingAmount, biddingTime, this.bidder);
         //ReserveAuction
         else if (item.auctionType.AuctionType.equals("ReserveAuction"))
-            ((ReserveAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+            ((ReserveAuction)item.auctionType).pushBid(biddingAmount, biddingTime, this.bidder);
         //VickeryAuction
         else if (item.auctionType.AuctionType.equals("VickeryAuction"))
-            ((VickeryAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+            ((VickeryAuction)item.auctionType).pushBid(biddingAmount, biddingTime, this.bidder);
+        boolean newBidItem = true;
+        for(int i = 0; i < bidder.biddingList.size() && newBidItem; i++){
+            if(item.itemName.equalsIgnoreCase(this.bidder.biddingList.get(i)))
+                newBidItem = false;
+        }
+        if(newBidItem)
+            this.bidder.biddingList.add(item.itemName);
     }
     
     public void displayCallingPrice(Item item){
@@ -608,7 +640,8 @@ public class AuctionSystem {
         
         for(int i=0;i<holdPrice.size()&&i<holdBidder.size();i++){
             System.out.print("Calling Price : RM"+holdPrice.get(i));            //is this output method okay?
-            System.out.println(" by " + holdBidder.get(i));
+            System.out.println(" by " + holdBidder.get(i).name);
+            System.out.println(" at " + item.auctionType.bidStack.bidTimeList.get(i));
         }
     }
     
@@ -849,6 +882,84 @@ public class AuctionSystem {
             return s+"\t";
         else return s+"\t";
     }
+<<<<<<< HEAD
+    
+    public void write(){
+        try{
+            PrintWriter input = new PrintWriter(new FileOutputStream("database/item.txt"));
+            for(int i = 0; i < itemList.getEntry(); i++){
+                itemList.getItem(i).getValue().write();
+            }
+        }catch(IOException e){
+            System.out.println("Problem with file output!");
+        }
+    }
+    
+    public void read(){
+        try{
+            Scanner read = new Scanner(new FileInputStream("database/item.txt"));
+            SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+            while(read.hasNextLine()){
+                String copy = read.nextLine();
+                String[] array = copy.split("[,;]");
+                String itemName = array[0];
+                Double itemPrice = Double.parseDouble(array[1]);
+                String itemDescription = array[2];
+                Date startTime1 = dateformat.parse(array[3]);
+                Date endTime1 = dateformat.parse(array[4]);
+                
+
+                int i = 5;
+                Bidder tempBidderObj;
+                BiddingStack<Double,Bidder, Date> biddingStackTemp = new BiddingStack<>();
+                try{
+                    Scanner read1 = new Scanner(new FileInputStream("database/userdatabase.txt"));
+                    int count = 6;
+                    
+                    while(count<array.length-2){
+                           
+                    while(read1.hasNextLine()){
+                        String[] arrayData = read1.nextLine().split(",");
+                        if(array[count].equalsIgnoreCase(arrayData[2])){
+                        tempBidderObj = new Bidder(arrayData[2],arrayData[3],arrayData[4],arrayData[5],arrayData[6]);
+                         biddingStackTemp.bidderList.add(tempBidderObj);
+                    }
+                    count+=3;
+                    }
+                    }
+                }catch (FileNotFoundException e){
+                        System.out.println("File was not found!");
+                        }
+                biddingStackTemp.bidPriceList.add(Double.parseDouble(array[7]));
+                biddingStackTemp.bidTimeList.add(dateformat.parse(array[8]));
+                 
+               
+//                int counter1 = 0;
+//                while(counter1<this.auctionType.bidStack.bidPriceList.size()-1){
+//                biddingStackTemp.push(this.auctionType.bidStack.bidPriceList.get(i), this.auctionType.bidStack.bidderList.get(i), this.auctionType.bidStack.bidTimeList.get(i));
+//                }
+                Auction auctionTemp;
+                if(array[5].equalsIgnoreCase("EnglishAuction")){
+                    auctionTemp = new EnglishAuction(itemPrice,biddingStackTemp,startTime1,endTime1,Double.parseDouble(array[array.length-1]));
+                }else if(array[5].equalsIgnoreCase("ReserveAuction")){
+                    auctionTemp =  new ReserveAuction(itemPrice,biddingStackTemp,startTime1,endTime1,Double.parseDouble(array[array.length-1]));
+                }else if(array[5].equalsIgnoreCase("VickeryAuction")){
+                    auctionTemp = new VickeryAuction(itemPrice,biddingStackTemp,startTime1,endTime1);
+                }else{
+                    auctionTemp = new BlindAuction(itemPrice,biddingStackTemp,startTime1, endTime1);
+                }
+                Item retrieveItem = new Item(itemName, itemPrice,itemDescription, auctionTemp);
+                itemList.addLast(startTime1, retrieveItem);
+            }
+            
+            
+            
+        }catch(FileNotFoundException a){
+            System.out.println("File was not found!");
+        }catch(ParseException b){
+            System.out.println("Error parsing!");
+        }
+=======
     public boolean bidderMode(){
         boolean continueMode=true;
         Scanner scan = new Scanner(System.in);
@@ -873,5 +984,6 @@ public class AuctionSystem {
                 System.out.print("Invalid input. Please enter again:");
         }
         return continueMode;
+>>>>>>> refs/remotes/origin/Updated-Ah-Bao
     }
 }
