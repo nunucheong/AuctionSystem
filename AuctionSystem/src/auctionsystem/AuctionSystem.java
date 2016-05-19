@@ -85,6 +85,8 @@ public class AuctionSystem {
                                 
                                 //Log out system back to main menu    
                                 case "4":
+                                    system.checkBiddingList();
+                                    system.updateUserdatabase(system.checkUserIdPosition(username));
                                     logStatus = false;
                                     break logIn;
                                 
