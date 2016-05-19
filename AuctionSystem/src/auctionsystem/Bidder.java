@@ -15,6 +15,7 @@ public class Bidder extends User{
     }
     public Bidder(String Name,String Ic, String PaymentType,String Address,String Phone){
         super(Name,Ic,PaymentType,Address,Phone);
+        bidFrequency = 0;
     }
     
     public Bidder(String Name,String Ic, String PaymentType,String Address,String Phone,int bidFrequency,ArrayList<String> bidList,ArrayList<String> success){
