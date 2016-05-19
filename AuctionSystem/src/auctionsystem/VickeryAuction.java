@@ -37,10 +37,14 @@ public class VickeryAuction extends Auction {
     }
     
     public double getSecondHighestBid(){
-        Triplet<Double, Bidder, Date> hold = this.bidStack.pop();
-        Triplet<Double, Bidder, Date> secondBid = this.bidStack.peek();
-        this.bidStack.push(hold.getKey(), hold.getValue(), hold.getThird());
-        return secondBid.getKey();
+        if(bidStack.bidPriceList.size() < 2)
+            return getHighestBid();
+        else{
+            Triplet<Double, Bidder, Date> hold = this.bidStack.pop();
+            Triplet<Double, Bidder, Date> secondBid = this.bidStack.peek();
+            this.bidStack.push(hold.getKey(), hold.getValue(), hold.getThird());
+            return secondBid.getKey();
+        }
     }
     
 }
