@@ -792,13 +792,14 @@ public class AuctionSystem {
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("Current Time: "+simpleFormat.format(current));
-        System.out.print("Available Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+        System.out.print("Available in Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
         for(int i=0; i<itemList.getEntry();i++){
             if(itemList.getItem(i).getKey().before(current)&&itemList.getItem(i).getValue().auctionType.endTime.after(current)){
                 holdItem=itemList.getItem(i).getValue();
                 System.out.printf("\n,\t\t,\t,t\t,\t\t,\t\t",holdItem.getName(),holdItem.getPrice(),holdItem.getDescription(),holdItem.auctionType.startTime,holdItem.auctionType.endTime,holdItem.auctionType.AuctionType);
             }
         }
+        System.out.println();
     }
     
     public void DisplayAllAuction(){
@@ -810,9 +811,26 @@ public class AuctionSystem {
             System.out.printf("\n,\t\t,\t,t\t,\t\t,\t\t",hold.getName(),hold.getPrice(),hold.getDescription(),hold.auctionType.startTime,hold.auctionType.endTime,hold.auctionType.AuctionType);
         }
     }
+    public void accessBiddingList(){
+        System.out.println("Item(s) you are currently bidding: ");
+        System.out.println(bidder.biddingList);
+    }
     public void successBidList(){
         System.out.println("Item(s) that "+bidder.getName() +" successfully bid: ");
         System.out.println(bidder.successBidList);
+    }
+    
+    public void bidNewItem(){
+        onGoingAuction();
+        Scanner scan = new Scanner(System.in);
+        String choice=scan.nextLine();
+        for(int i=0;i<itemList.getEntry();i++){
+            if(choice.equalsIgnoreCase(itemList.getItem(i).getValue().getName())){
+                bidder.biddingList.add(itemList.getItem(i).getValue().getName());
+            }
+            else
+                System.out.println("Item not available.");
+        }
     }
 
     public String calcTab(String s){
@@ -826,5 +844,29 @@ public class AuctionSystem {
             return s+"\t";
         else return s+"\t";
     }
-    
+    public boolean bidderMode(){
+        boolean continueMode=true;
+        Scanner scan = new Scanner(System.in);
+        System.out.println("\n======Bidder Mode======");
+        System.out.println("1. Check ongoing auction\\n2. Check bidding auction\\n3. Check success bidding\\n4. Bid new item\\n5. Exit bidder mode\\nPlease choose: ");
+        String choice=scan.nextLine();
+        switch(choice){
+            case "1":
+                onGoingAuction();
+                break;
+            case "2":
+                accessBiddingList();
+                break;
+            case "3":
+                successBidList();
+                break;
+            case "4":
+                bidNewItem();
+            case "5":
+                continueMode=false;
+            default:
+                System.out.print("Invalid input. Please enter again:");
+        }
+        return continueMode;
+    }
 }
