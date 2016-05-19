@@ -48,6 +48,8 @@ public class AuctionSystem {
                     System.out.print("Please enter your username: ");
                     username = sc.nextLine();
                     logStatus = system.logIn(username);
+                    if(logStatus)                         
+                        System.out.println("Welcome back " + username);                              
                     logIn:
                     while(logStatus){
                         //create new user object
@@ -59,7 +61,7 @@ public class AuctionSystem {
                             switch(choice2){
                                 //Enter seller mode
                                 case "1": 
-                                     boolean sellerMode = true;
+                                    boolean sellerMode = true;
                                     while(sellerMode){
                                         sellerMode = system.sellerMode();
                                     }
@@ -188,6 +190,24 @@ public class AuctionSystem {
         System.out.println("5. Phone number: " + user.getPhone());
     }
     
+    public double sellerTotalIncome(){
+        double sum = 0;
+        for(int i = 0; i<seller.itemList.size(); i++){
+            sum += seller.itemList.get(i).getPrice();
+        }
+        return sum;
+    }
+    
+    public double bidderTotalPendingPayment(){
+        double sum = 0;
+        for(int i = 0; i<bidder.biddingList.size(); i++){
+            String itemName = bidder.biddingList.get(i);
+            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+            sum += item.getPrice();
+        }
+        return sum;
+    }
+    
     public boolean accessProfile(){
         boolean manageProfile = true;
         Scanner sc = new Scanner (System.in);
@@ -198,6 +218,8 @@ public class AuctionSystem {
             switch(choice){
                 case "1":
                     displayProfile();
+                    System.out.println("6. Total income amount: " + sellerTotalIncome());
+                    System.out.println("7. Total pending payment: " + bidderTotalPendingPayment());
                     manageProfile = true;
                     break;
                     
@@ -355,8 +377,8 @@ public class AuctionSystem {
                 userData[count] = hold;
                 count++;
             }
-            
-        String record = userData[0] + "," + userData[1] + "," + user.getName() + "," + user.getIC() + "," + user.getPaymentType() + "," + user.getAddress() + "," + user.getPhone() + "," + userData[7] + "," + userData[8] + "," + userData[9];
+               
+        String record = userData[0] + "," + userData[1] + "," + user.getName() + "," + user.getIC() + "," + user.getPaymentType() + "," + user.getAddress() + "," + user.getPhone() + "," + userData + "," + userData[8] + "," + userData[9] + ",";
             
         try{
             PrintWriter inputstream = new PrintWriter (new FileOutputStream ("database/userdatabase.txt", true));
@@ -493,6 +515,9 @@ public class AuctionSystem {
         System.out.println("All Auction: ");
         System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
         for(int i = 0; i<list.size(); i++){
+            String itemName = list.get(i);
+           Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+           System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).startTime+"")+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType+""));
         }
     }
     
@@ -615,7 +640,8 @@ public class AuctionSystem {
         
         for(int i=0;i<holdPrice.size()&&i<holdBidder.size();i++){
             System.out.print("Calling Price : RM"+holdPrice.get(i));            //is this output method okay?
-            System.out.println(" by " + holdBidder.get(i));
+            System.out.println(" by " + holdBidder.get(i).name);
+            System.out.println(" at " + item.auctionType.bidStack.bidTimeList.get(i));
         }
     }
     
@@ -799,29 +825,37 @@ public class AuctionSystem {
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("Current Time: "+simpleFormat.format(current));
-        System.out.print("Available Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+        System.out.print("Available in Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
         for(int i=0; i<itemList.getEntry();i++){
             if(itemList.getItem(i).getKey().before(current)&&itemList.getItem(i).getValue().auctionType.endTime.after(current)){
                 holdItem=itemList.getItem(i).getValue();
-                System.out.printf("\n,\t\t,\t,t\t,\t\t,\t\t",holdItem.getName(),holdItem.getPrice(),holdItem.getDescription(),holdItem.auctionType.startTime,holdItem.auctionType.endTime,holdItem.auctionType.AuctionType);
+                System.out.print(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
             }
         }
+        System.out.println();
     }
     
     public void DisplayAllAuction(){
-        Item hold;
+        Item holdItem;
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("All Auction: ");
         System.out.println("Item Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
         for(int i=0; i<itemList.getEntry();i++){
-            hold=itemList.getItem(i).getValue();
-            System.out.printf("\n,\t\t,\t,t\t,\t\t,\t\t",hold.getName(),hold.getPrice(),hold.getDescription(),hold.auctionType.startTime,hold.auctionType.endTime,hold.auctionType.AuctionType);
+            holdItem=itemList.getItem(i).getValue();
+            System.out.print(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
         }
     }
+
+    public void accessBiddingList(){
+        System.out.println("Item(s) you are currently bidding: ");
+        System.out.println(bidder.biddingList);
+    }
+
     public void successBidList(){
         System.out.println("Item(s) that "+bidder.getName() +" successfully bid: ");
         System.out.println(bidder.successBidList);
     }
-
+    
     public String calcTab(String s){
         if(s.length()<8)
             return s+"\t\t\t";
@@ -832,6 +866,20 @@ public class AuctionSystem {
         else if(s.length()>24&&s.length()<32)
             return s+"\t";
         else return s+"\t";
+    }
+
+    
+    public void bidNewItem(){
+        onGoingAuction();
+        Scanner scan = new Scanner(System.in);
+        String choice=scan.nextLine();
+        for(int i=0;i<itemList.getEntry();i++){
+            if(choice.equalsIgnoreCase(itemList.getItem(i).getValue().getName())){
+                bidder.biddingList.add(itemList.getItem(i).getValue().getName());
+            }
+            else
+                System.out.println("Item not available.");
+        }
     }
     
     public void write(){
@@ -909,5 +957,31 @@ public class AuctionSystem {
         }catch(ParseException b){
             System.out.println("Error parsing!");
         }
+    }
+    
+    public boolean bidderMode(){
+        boolean continueMode=true;
+        Scanner scan = new Scanner(System.in);
+        System.out.println("\n======Bidder Mode======");
+        System.out.println("1. Check ongoing auction\\n2. Check bidding auction\\n3. Check success bidding\\n4. Bid new item\\n5. Exit bidder mode\\nPlease choose: ");
+        String choice=scan.nextLine();
+        switch(choice){
+            case "1":
+                onGoingAuction();
+                break;
+            case "2":
+                accessBiddingList();
+                break;
+            case "3":
+                successBidList();
+                break;
+            case "4":
+                bidNewItem();
+            case "5":
+                continueMode=false;
+            default:
+                System.out.print("Invalid input. Please enter again:");
+        }
+        return continueMode;
     }
 }
