@@ -757,7 +757,7 @@ public class AuctionSystem {
         return currentTime;
     }
     
-    public void onGoingAuction(){
+    /*public void onGoingAuction(){
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("Current Time: "+simpleFormat.format(current));
@@ -785,8 +785,35 @@ public class AuctionSystem {
         }
         catch(ParseException e){
         }
+    }*/
+    
+    public void onGoingAuction(){
+        Item holdItem;
+        Date current=new Date();
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        System.out.println("Current Time: "+simpleFormat.format(current));
+        System.out.print("Available Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+        for(int i=0; i<itemList.getEntry();i++){
+            if(itemList.getItem(i).getKey().before(current)&&itemList.getItem(i).getValue().auctionType.endTime.after(current)){
+                holdItem=itemList.getItem(i).getValue();
+                System.out.printf("\n,\t\t,\t,t\t,\t\t,\t\t",holdItem.getName(),holdItem.getPrice(),holdItem.getDescription(),holdItem.auctionType.startTime,holdItem.auctionType.endTime,holdItem.auctionType.AuctionType);
+            }
+        }
     }
-
+    
+    public void DisplayAllAuction(){
+        Item hold;
+        System.out.println("All Auction: ");
+        System.out.println("Item Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+        for(int i=0; i<itemList.getEntry();i++){
+            hold=itemList.getItem(i).getValue();
+            System.out.printf("\n,\t\t,\t,t\t,\t\t,\t\t",hold.getName(),hold.getPrice(),hold.getDescription(),hold.auctionType.startTime,hold.auctionType.endTime,hold.auctionType.AuctionType);
+        }
+    }
+    public void successBidList(){
+        System.out.println("Item(s) that "+bidder.getName() +" successfully bid: ");
+        System.out.println(bidder.successBidList);
+    }
 
     public String calcTab(String s){
         if(s.length()<8)
@@ -799,5 +826,5 @@ public class AuctionSystem {
             return s+"\t";
         else return s+"\t";
     }
-  
+    
 }

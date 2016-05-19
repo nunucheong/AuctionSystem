@@ -82,7 +82,7 @@ public class ItemLinkedList<T,E> {
     }
     
     public Pair<T,E> remove(int index){
-        Pair<T,E> hold = null;
+        Pair<T,E> hold ;
         if (index <= 0 || index >= entry) 
             hold =  null;
         else if (index == 1)
