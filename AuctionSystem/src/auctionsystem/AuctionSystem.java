@@ -796,19 +796,20 @@ public class AuctionSystem {
         for(int i=0; i<itemList.getEntry();i++){
             if(itemList.getItem(i).getKey().before(current)&&itemList.getItem(i).getValue().auctionType.endTime.after(current)){
                 holdItem=itemList.getItem(i).getValue();
-                System.out.printf("\n,\t\t,\t,t\t,\t\t,\t\t",holdItem.getName(),holdItem.getPrice(),holdItem.getDescription(),holdItem.auctionType.startTime,holdItem.auctionType.endTime,holdItem.auctionType.AuctionType);
+                System.out.print(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
             }
         }
         System.out.println();
     }
     
     public void DisplayAllAuction(){
-        Item hold;
+        Item holdItem;
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("All Auction: ");
         System.out.println("Item Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
         for(int i=0; i<itemList.getEntry();i++){
-            hold=itemList.getItem(i).getValue();
-            System.out.printf("\n,\t\t,\t,t\t,\t\t,\t\t",hold.getName(),hold.getPrice(),hold.getDescription(),hold.auctionType.startTime,hold.auctionType.endTime,hold.auctionType.AuctionType);
+            holdItem=itemList.getItem(i).getValue();
+            System.out.print(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
         }
     }
     public void accessBiddingList(){
@@ -821,16 +822,20 @@ public class AuctionSystem {
     }
     
     public void bidNewItem(){
+        Date current=new Date();
         onGoingAuction();
         Scanner scan = new Scanner(System.in);
+        System.out.print("Please enter the item you want to bid: ");
         String choice=scan.nextLine();
         for(int i=0;i<itemList.getEntry();i++){
             if(choice.equalsIgnoreCase(itemList.getItem(i).getValue().getName())){
                 bidder.biddingList.add(itemList.getItem(i).getValue().getName());
+                itemList.getItem(i).getValue().auctionType.bidStack.push(itemList.getItem(i).getValue().getPrice(), bidder, current);// * need this?
+                System.out.println(itemList.getItem(i).getValue().itemName+" is added to your bidding list. ");
+                break;
             }
-            else
-                System.out.println("Item not available.");
         }
+        System.out.println("Item not found.");
     }
 
     public String calcTab(String s){
