@@ -587,19 +587,26 @@ public class AuctionSystem {
     }
     
     
-    public void setBidderCall(Item item, Date biddingTime, Double biddingAmount, Bidder bidder){
+    public void setBidderCall(Item item, Date biddingTime, Double biddingAmount){
         //English Auction 
         if (item.auctionType.AuctionType.equals("EnglishAuction"))
-            ((EnglishAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+            ((EnglishAuction)item.auctionType).pushBid(biddingAmount, biddingTime, this.bidder);
         //BlindAuction
         else if (item.auctionType.AuctionType.equals("BlindAuction"))
-            ((BlindAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+            ((BlindAuction)item.auctionType).pushBid(biddingAmount, biddingTime, this.bidder);
         //ReserveAuction
         else if (item.auctionType.AuctionType.equals("ReserveAuction"))
-            ((ReserveAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+            ((ReserveAuction)item.auctionType).pushBid(biddingAmount, biddingTime, this.bidder);
         //VickeryAuction
         else if (item.auctionType.AuctionType.equals("VickeryAuction"))
-            ((VickeryAuction)item.auctionType).pushBid(biddingAmount, biddingTime, bidder);
+            ((VickeryAuction)item.auctionType).pushBid(biddingAmount, biddingTime, this.bidder);
+        boolean newBidItem = true;
+        for(int i = 0; i < bidder.biddingList.size() && newBidItem; i++){
+            if(item.itemName.equalsIgnoreCase(this.bidder.biddingList.get(i)))
+                newBidItem = false;
+        }
+        if(newBidItem)
+            this.bidder.biddingList.add(item.itemName);
     }
     
     public void displayCallingPrice(Item item){
@@ -827,4 +834,80 @@ public class AuctionSystem {
         else return s+"\t";
     }
     
+    public void write(){
+        try{
+            PrintWriter input = new PrintWriter(new FileOutputStream("database/item.txt"));
+            for(int i = 0; i < itemList.getEntry(); i++){
+                itemList.getItem(i).getValue().write();
+            }
+        }catch(IOException e){
+            System.out.println("Problem with file output!");
+        }
+    }
+    
+    public void read(){
+        try{
+            Scanner read = new Scanner(new FileInputStream("database/item.txt"));
+            SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+            while(read.hasNextLine()){
+                String copy = read.nextLine();
+                String[] array = copy.split("[,;]");
+                String itemName = array[0];
+                Double itemPrice = Double.parseDouble(array[1]);
+                String itemDescription = array[2];
+                Date startTime1 = dateformat.parse(array[3]);
+                Date endTime1 = dateformat.parse(array[4]);
+                
+
+                int i = 5;
+                Bidder tempBidderObj;
+                BiddingStack<Double,Bidder, Date> biddingStackTemp = new BiddingStack<>();
+                try{
+                    Scanner read1 = new Scanner(new FileInputStream("database/userdatabase.txt"));
+                    int count = 6;
+                    
+                    while(count<array.length-2){
+                           
+                    while(read1.hasNextLine()){
+                        String[] arrayData = read1.nextLine().split(",");
+                        if(array[count].equalsIgnoreCase(arrayData[2])){
+                        tempBidderObj = new Bidder(arrayData[2],arrayData[3],arrayData[4],arrayData[5],arrayData[6]);
+                         biddingStackTemp.bidderList.add(tempBidderObj);
+                    }
+                    count+=3;
+                    }
+                    }
+                }catch (FileNotFoundException e){
+                        System.out.println("File was not found!");
+                        }
+                biddingStackTemp.bidPriceList.add(Double.parseDouble(array[7]));
+                biddingStackTemp.bidTimeList.add(dateformat.parse(array[8]));
+                 
+               
+//                int counter1 = 0;
+//                while(counter1<this.auctionType.bidStack.bidPriceList.size()-1){
+//                biddingStackTemp.push(this.auctionType.bidStack.bidPriceList.get(i), this.auctionType.bidStack.bidderList.get(i), this.auctionType.bidStack.bidTimeList.get(i));
+//                }
+                Auction auctionTemp;
+                if(array[5].equalsIgnoreCase("EnglishAuction")){
+                    auctionTemp = new EnglishAuction(itemPrice,biddingStackTemp,startTime1,endTime1,Double.parseDouble(array[array.length-1]));
+                }else if(array[5].equalsIgnoreCase("ReserveAuction")){
+                    auctionTemp =  new ReserveAuction(itemPrice,biddingStackTemp,startTime1,endTime1,Double.parseDouble(array[array.length-1]));
+                }else if(array[5].equalsIgnoreCase("VickeryAuction")){
+                    auctionTemp = new VickeryAuction(itemPrice,biddingStackTemp,startTime1,endTime1);
+                }else{
+                    auctionTemp = new BlindAuction(itemPrice,biddingStackTemp,startTime1, endTime1);
+                }
+                Item retrieveItem = new Item(itemName, itemPrice,itemDescription, auctionTemp);
+                itemList.addLast(startTime1, retrieveItem);
+            }
+            
+            
+            
+        }catch(FileNotFoundException a){
+            System.out.println("File was not found!");
+        }catch(ParseException b){
+            System.out.println("Error parsing!");
+        }
+    }
 }
