@@ -882,7 +882,6 @@ public class AuctionSystem {
             return s+"\t";
         else return s+"\t";
     }
-<<<<<<< HEAD
     
     public void write(){
         try{
@@ -959,7 +958,8 @@ public class AuctionSystem {
         }catch(ParseException b){
             System.out.println("Error parsing!");
         }
-=======
+    }
+        
     public boolean bidderMode(){
         boolean continueMode=true;
         Scanner scan = new Scanner(System.in);
@@ -984,6 +984,5 @@ public class AuctionSystem {
                 System.out.print("Invalid input. Please enter again:");
         }
         return continueMode;
->>>>>>> refs/remotes/origin/Updated-Ah-Bao
     }
 }
