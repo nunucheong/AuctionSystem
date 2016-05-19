@@ -48,6 +48,8 @@ public class AuctionSystem {
                     System.out.print("Please enter your username: ");
                     username = sc.nextLine();
                     logStatus = system.logIn(username);
+                    if(logStatus)                         
+                        System.out.println("Welcome back " + username);                              
                     logIn:
                     while(logStatus){
                         //create new user object
@@ -59,7 +61,7 @@ public class AuctionSystem {
                             switch(choice2){
                                 //Enter seller mode
                                 case "1": 
-                                     boolean sellerMode = true;
+                                    boolean sellerMode = true;
                                     while(sellerMode){
                                         sellerMode = system.sellerMode();
                                     }
@@ -188,6 +190,24 @@ public class AuctionSystem {
         System.out.println("5. Phone number: " + user.getPhone());
     }
     
+    public double sellerTotalIncome(){
+        double sum = 0;
+        for(int i = 0; i<seller.itemList.size(); i++){
+            sum += seller.itemList.get(i).getPrice();
+        }
+        return sum;
+    }
+    
+    public double bidderTotalPendingPayment(){
+        double sum = 0;
+        for(int i = 0; i<bidder.biddingList.size(); i++){
+            String itemName = bidder.biddingList.get(i);
+            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+            sum += item.getPrice();
+        }
+        return sum;
+    }
+    
     public boolean accessProfile(){
         boolean manageProfile = true;
         Scanner sc = new Scanner (System.in);
@@ -198,6 +218,8 @@ public class AuctionSystem {
             switch(choice){
                 case "1":
                     displayProfile();
+                    System.out.println("6. Total income amount: " + sellerTotalIncome());
+                    System.out.println("7. Total pending payment: " + bidderTotalPendingPayment());
                     manageProfile = true;
                     break;
                     
@@ -355,8 +377,8 @@ public class AuctionSystem {
                 userData[count] = hold;
                 count++;
             }
-            
-        String record = userData[0] + "," + userData[1] + "," + user.getName() + "," + user.getIC() + "," + user.getPaymentType() + "," + user.getAddress() + "," + user.getPhone() + "," + userData[7] + "," + userData[8] + "," + userData[9];
+               
+        String record = userData[0] + "," + userData[1] + "," + user.getName() + "," + user.getIC() + "," + user.getPaymentType() + "," + user.getAddress() + "," + user.getPhone() + "," + userData + "," + userData[8] + "," + userData[9] + ",";
             
         try{
             PrintWriter inputstream = new PrintWriter (new FileOutputStream ("database/userdatabase.txt", true));
@@ -493,6 +515,9 @@ public class AuctionSystem {
         System.out.println("All Auction: ");
         System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
         for(int i = 0; i<list.size(); i++){
+            String itemName = list.get(i);
+           Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+           System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).startTime+"")+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType+""));
         }
     }
     

@@ -132,7 +132,6 @@ public class LogIn {
     public void checkLogInStatus(){
         if (passwordAuthentication && usernameAuthentication){
             logInAuthentication = true;
-            System.out.println("Welcome back " + username);
         }
         else{
             System.out.println("Username or password error. Please log in again.");
