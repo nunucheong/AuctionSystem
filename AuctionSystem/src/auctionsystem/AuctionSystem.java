@@ -845,32 +845,17 @@ public class AuctionSystem {
             System.out.print(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
         }
     }
+
     public void accessBiddingList(){
         System.out.println("Item(s) you are currently bidding: ");
         System.out.println(bidder.biddingList);
     }
+
     public void successBidList(){
         System.out.println("Item(s) that "+bidder.getName() +" successfully bid: ");
         System.out.println(bidder.successBidList);
     }
     
-    public void bidNewItem(){
-        Date current=new Date();
-        onGoingAuction();
-        Scanner scan = new Scanner(System.in);
-        System.out.print("Please enter the item you want to bid: ");
-        String choice=scan.nextLine();
-        for(int i=0;i<itemList.getEntry();i++){
-            if(choice.equalsIgnoreCase(itemList.getItem(i).getValue().getName())){
-                bidder.biddingList.add(itemList.getItem(i).getValue().getName());
-                itemList.getItem(i).getValue().auctionType.bidStack.push(itemList.getItem(i).getValue().getPrice(), bidder, current);// * need this?
-                System.out.println(itemList.getItem(i).getValue().itemName+" is added to your bidding list. ");
-                break;
-            }
-        }
-        System.out.println("Item not found.");
-    }
-
     public String calcTab(String s){
         if(s.length()<8)
             return s+"\t\t\t";
@@ -882,7 +867,20 @@ public class AuctionSystem {
             return s+"\t";
         else return s+"\t";
     }
-<<<<<<< HEAD
+
+    
+    public void bidNewItem(){
+        onGoingAuction();
+        Scanner scan = new Scanner(System.in);
+        String choice=scan.nextLine();
+        for(int i=0;i<itemList.getEntry();i++){
+            if(choice.equalsIgnoreCase(itemList.getItem(i).getValue().getName())){
+                bidder.biddingList.add(itemList.getItem(i).getValue().getName());
+            }
+            else
+                System.out.println("Item not available.");
+        }
+    }
     
     public void write(){
         try{
@@ -959,7 +957,8 @@ public class AuctionSystem {
         }catch(ParseException b){
             System.out.println("Error parsing!");
         }
-=======
+    }
+    
     public boolean bidderMode(){
         boolean continueMode=true;
         Scanner scan = new Scanner(System.in);
@@ -984,6 +983,5 @@ public class AuctionSystem {
                 System.out.print("Invalid input. Please enter again:");
         }
         return continueMode;
->>>>>>> refs/remotes/origin/Updated-Ah-Bao
     }
 }
