@@ -32,7 +32,7 @@ public class AuctionSystem {
         Scanner sc = new Scanner (System.in);
         boolean runProgram = true;
         boolean logStatus;
-        
+        system.read();
         startProgram: 
         while (runProgram){
             System.out.println("\nWelcome to Watching Euuuuu ( ͡° ͜ʖ ͡°) Auction System!");
@@ -113,6 +113,7 @@ public class AuctionSystem {
                 
                 case "3":
                     runProgram = false;
+                    system.write();
                     break;
                 
                 default:
@@ -470,6 +471,7 @@ public class AuctionSystem {
         }
         System.out.println(i+ " " +item.toString());
         itemList.add(i, date, item);  
+        seller.itemList.add(item);
     }
     
     public boolean sellerMode(){
@@ -509,6 +511,7 @@ public class AuctionSystem {
     public void accessSellerAllItem(){
         ArrayList<Item> allItem = seller.itemList;
         System.out.println("====== Seller All Item ======");
+        System.out.println(seller.itemList.get(0).itemName);
         displayItemList(allItem);
     }
     
@@ -645,23 +648,27 @@ public class AuctionSystem {
                     b = dateformat.parse(endTime);
                     newAuction = new EnglishAuction (itemPrice,a , b, minExceed);
                 }catch (ParseException e){
-                    System.out.println("Error parsing.");
+                    System.out.println("Error parsing. in createNewItem");
                 }
                 break;
             
             case "2":
                 try{
-                    newAuction = new BlindAuction (itemPrice, dateformat.parse(startTime), dateformat.parse(endTime));
+                    a = dateformat.parse(startTime);
+                    b = dateformat.parse(endTime);
+                    newAuction = new BlindAuction (itemPrice, a, b);
                 }catch(ParseException e){
-                    System.out.println("Error parsing.");
+                    System.out.println("Error parsing.in createNewItem");
                 }
                 break;
                 
             case "3":
                 try{
-                    newAuction = new VickeryAuction (itemPrice, dateformat.parse(startTime), dateformat.parse(endTime));
+                    a = dateformat.parse(startTime);
+                    b = dateformat.parse(endTime);
+                    newAuction = new VickeryAuction (itemPrice, a, b);
                 }catch(ParseException e){
-                    System.out.println("Error parsing.");
+                    System.out.println("Error parsing.in createNewItem");
                 }
                 break;
                 
@@ -669,9 +676,11 @@ public class AuctionSystem {
                 System.out.print("\nReserve price: ");
                 double reservePrice = sc.nextDouble();
                 try{
-                    newAuction = new ReserveAuction (itemPrice, dateformat.parse(startTime), dateformat.parse(endTime), reservePrice);
+                    a = dateformat.parse(startTime);
+                    b = dateformat.parse(endTime);
+                    newAuction = new ReserveAuction (itemPrice,  a, b, reservePrice);
                 }catch(ParseException e){
-                    System.out.println("Error parsing.");
+                    System.out.println("Error parsing.in createNewItem");
                 }
                 break;
                 
@@ -682,7 +691,7 @@ public class AuctionSystem {
         try {
             addItem(dateformat.parse(startTime), new Item(itemName, itemPrice, itemDescription, newAuction));
         } catch (ParseException e) {
-            System.out.println("Error parsing.");
+            System.out.println("Error parsing.in addItem");
         }
     }
     
@@ -808,6 +817,7 @@ public class AuctionSystem {
             System.out.println("Error Parsing!");
         }
     }
+    
      public void sortDateDsc(){
             int x = checkDatabaseLines();
             String[]name = new String[x];
@@ -1050,7 +1060,11 @@ public class AuctionSystem {
                 }
                 Item retrieveItem = new Item(itemName, itemPrice,itemDescription, auctionTemp);
                 itemList.addLast(startTime1, retrieveItem);
-            }
+            }       
+        }catch(FileNotFoundException a){
+            System.out.println("File was not found!");
+        }catch(ParseException b){
+            System.out.println("Error parsing!");
         }
     }
     

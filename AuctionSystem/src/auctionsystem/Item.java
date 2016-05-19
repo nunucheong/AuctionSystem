@@ -48,32 +48,32 @@ public class Item {
         return getName();
     }
    
-    public void write(){        
-        try{
-            SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-            PrintWriter input = new PrintWriter(new FileOutputStream("database/item.txt",true));
-            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.AuctionType+",");
-            int i = 0;
-            while(i < this.auctionType.bidStack.bidPriceList.size()){
-                if(i == this.auctionType.bidStack.bidPriceList.size()-1)
-                     input.printf(this.auctionType.bidStack.bidderList.get(i).name+";"+this.auctionType.bidStack.bidPriceList.get(i)+";"+dateformat.parse(this.auctionType.bidStack.bidTimeList.get(i).toString())+",");
-                else
-                    input.printf(this.auctionType.bidStack.bidderList.get(i).name+";"+this.auctionType.bidStack.bidPriceList.get(i)+";"+dateformat.parse(this.auctionType.bidStack.bidTimeList.get(i).toString())+";");
-                i++;
-               
-            }
-            if(this.auctionType.AuctionType.equalsIgnoreCase("EnglishAuction")){
-                input.println(((EnglishAuction)auctionType).getMinExceed());
-            }else if(this.auctionType.AuctionType.equalsIgnoreCase("ReserveAuction")){
-                input.println(((ReserveAuction)auctionType).getReservePrice());
-            }else{
-                input.println("null");
-            }
-            input.close();
-        }catch(IOException e){
-            System.out.println("Problem with file output!");
-        }catch(ParseException f){
-            System.out.println("Error parsing!");
-        }
-    }    
+//    public void write(){        
+//        try{
+//            SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+//            PrintWriter input = new PrintWriter(new FileOutputStream("database/item.txt",true));
+//            input.printf(this.itemName+","+this.itemPrice+","+this.itemDescription+","+this.auctionType.startTime+","+this.auctionType.endTime+","+this.auctionType.AuctionType+",");
+//            int i = 0;
+//            while(i < this.auctionType.bidStack.bidPriceList.size()){
+//                if(i == this.auctionType.bidStack.bidPriceList.size()-1)
+//                     input.printf(this.auctionType.bidStack.bidderList.get(i).name+";"+this.auctionType.bidStack.bidPriceList.get(i)+";"+dateformat.parse(this.auctionType.bidStack.bidTimeList.get(i).toString())+",");
+//                else
+//                    input.printf(this.auctionType.bidStack.bidderList.get(i).name+";"+this.auctionType.bidStack.bidPriceList.get(i)+";"+dateformat.parse(this.auctionType.bidStack.bidTimeList.get(i).toString())+";");
+//                i++;
+//               
+//            }
+//            if(this.auctionType.AuctionType.equalsIgnoreCase("EnglishAuction")){
+//                input.println(((EnglishAuction)auctionType).getMinExceed());
+//            }else if(this.auctionType.AuctionType.equalsIgnoreCase("ReserveAuction")){
+//                input.println(((ReserveAuction)auctionType).getReservePrice());
+//            }else{
+//                input.println("null");
+//            }
+//            input.close();
+//        }catch(IOException e){
+//            System.out.println("Problem with file output!");
+//        }catch(ParseException f){
+//            System.out.println("Error parsing!");
+//        }
+//    }    
 }
