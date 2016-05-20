@@ -74,7 +74,7 @@ public class AuctionSystem {
                                 case "2":
                                     boolean bidderMode = true;
                                     while(bidderMode){
-                                       system.checkBiddingList();
+                                       bidderMode = system.bidderMode();
                                     }
                                     break;
                                 //allow user to manage profile
