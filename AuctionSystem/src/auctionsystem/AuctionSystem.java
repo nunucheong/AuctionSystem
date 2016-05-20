@@ -241,7 +241,6 @@ public class AuctionSystem {
                     String choice2 = sc.nextLine();
                     edit = editor(choice2); 
                     }
-                    updateUserdatabase(checkUserIdPosition(username));
                     manageProfile = true;
                     break;
                 
@@ -341,7 +340,7 @@ public class AuctionSystem {
     }    
     
     public void updateUserdatabase(int delete){
-        String deleted=null;
+        String deleted= null;
         try{
             File temp = new File("database/temp.txt");
             File read = new File("database/userdatabase.txt");
@@ -365,47 +364,60 @@ public class AuctionSystem {
             System.gc();
             
             read.setWritable(true);
-//            read.delete();
-            if (!read.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-//            temp.renameTo(read);
+            read.delete();
+//            if (!read.delete()) {
+//                System.out.println("Could not delete file");
+//                return;
+//            }
+            temp.renameTo(read);
 
   //          Rename the new file to the filename the original file had.
-            if (!temp.renameTo(read)){
-                    System.out.println("Could not rename file");
-
-            }
+//            if (!temp.renameTo(read)){
+//                    System.out.println("Could not rename file");
+//
+//            }
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
         }
         
         String sellerItemList = "";
-        for(int i = 0; i<seller.itemList.size(); i++){
-            Item item = seller.itemList.get(i);
-            if(i==seller.itemList.size()-1)
-                sellerItemList = sellerItemList + item.getName();
-            else
-                sellerItemList = sellerItemList + item.getName() + ":";
+        if(seller.itemList.size() == 0)
+            sellerItemList = "null";
+        else{
+            for(int i = 0; i<seller.itemList.size(); i++){
+                Item item = seller.itemList.get(i);
+                if(i==seller.itemList.size()-1)
+                    sellerItemList = sellerItemList + item.getName();
+                else
+                    sellerItemList = sellerItemList + item.getName() + ":";
+            }
         }
         
+        
         String bidderBiddingList = "";
-        for(int i = 0; i<bidder.biddingList.size(); i++){
-            String itemName = bidder.biddingList.get(i);
-            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
-            if(i==bidder.biddingList.size()-1)
-                bidderBiddingList = bidderBiddingList + item.getName();
-            else bidderBiddingList = bidderBiddingList + item.getName() + ":";
+        if(bidder.biddingList.size()==0)
+            bidderBiddingList = "null";
+        else{
+            for(int i = 0; i<bidder.biddingList.size(); i++){
+                String itemName = bidder.biddingList.get(i);
+                Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+                if(i==bidder.biddingList.size()-1)
+                    bidderBiddingList = bidderBiddingList + item.getName();
+                else bidderBiddingList = bidderBiddingList + item.getName() + ":";
+            }
         }
         
         String bidderSuccessList = "";
-        for(int i = 0; i<bidder.successBidList.size(); i++){
-            String itemName = bidder.successBidList.get(i);
-            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
-            if(i==bidder.successBidList.size()-1)
-                bidderSuccessList = bidderSuccessList + item.getName();
-            else bidderSuccessList = bidderSuccessList + item.getName() + ":";
+        if(bidder.successBidList.size()==0)
+            bidderSuccessList = "null";
+        else{
+            for(int i = 0; i<bidder.successBidList.size(); i++){
+                String itemName = bidder.successBidList.get(i);
+                Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+                if(i==bidder.successBidList.size()-1)
+                    bidderSuccessList = bidderSuccessList + item.getName();
+                else bidderSuccessList = bidderSuccessList + item.getName() + ":";
+            }
         }
         
         String[] userData = new String[11];
@@ -449,14 +461,16 @@ public class AuctionSystem {
             System.gc();
             
             read.setWritable(true);
-            if (!read.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-            //Rename the new file to the filename the original file had.
-            if (!temp.renameTo(read)){
-                    System.out.println("Could not rename file");
-            }
+            read.delete();
+            temp.renameTo(read);
+//            if (!read.delete()) {
+//                System.out.println("Could not delete file");
+//                return;
+//            }
+//            //Rename the new file to the filename the original file had.
+//            if (!temp.renameTo(read)){
+//                    System.out.println("Could not rename file");
+//            }
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
         }
@@ -509,7 +523,7 @@ public class AuctionSystem {
     
     public void accessSellerAllItem(){
         ArrayList<Item> allItem = seller.itemList;
-        System.out.println("====== Seller All Item ======");
+        System.out.println("\n====== Seller All Item ======");
         displayItemList(allItem);
     }
     
@@ -588,22 +602,21 @@ public class AuctionSystem {
     //Ended Auction + Success List
     public void accessBidderEndedList(){
         System.out.println("====== Ended Auction ======");
-        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Item Description")+calcTab("Auction Start Time")+calcTab("Auction End Time")+calcTab("Auction Type"));
-        //System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\t\tAuction Winner\t\tWinning Prize");
+        System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\t\tAuction Winner\t\tWinning Prize");
         displayStringList(bidder.successBidList);
         displayStringList(bidderEndedBid);
     }
     
     public void accessBidderBiddingList(){
-        System.out.println("\n====== Bidding Auction ======");
+        System.out.println("====== Bidding Auction ======");
         Date currentDate = new Date();
         System.out.println("Current Time: "+dateformat.format(currentDate));
         System.out.println("All Auction: ");
-        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Item Description")+calcTab("Auction Start Time")+calcTab("Auction End Time")+calcTab("Auction"));
+        System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
         for(int i = 0; i<bidder.biddingList.size(); i++){
             String itemName = bidder.biddingList.get(i);
            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
-           System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab(dateformat.format((item.auctionType).startTime))+calcTab(dateformat.format((item.auctionType).endTime))+calcTab(item.auctionType.AuctionType+""));
+           System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).startTime+"")+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType+""));
         }
     }
     
@@ -640,7 +653,7 @@ public class AuctionSystem {
         String choice = sc.nextLine();
         switch(choice){
             case "1":
-                System.out.print("\nMinimum exceed amount: ");
+                System.out.print("\nMinimum exceed amount: RM");
                 double minExceed = sc.nextDouble();
                 try{
                     a = dateformat.parse(startTime);
@@ -690,13 +703,15 @@ public class AuctionSystem {
         try {
             newAuction.stTime = startTime;
             newAuction.enTime = endTime;
-            addItem(dateformat.parse(startTime), new Item(itemName, itemPrice, itemDescription, newAuction));
+            Item newItem = new Item(itemName, itemPrice, itemDescription, newAuction);
+            addItem(dateformat.parse(startTime), newItem);
+            seller.itemList.add(newItem);
         } catch (ParseException e) {
             System.out.println("Error parsing.in addItem");
         }
     }
     
-    /*public static void checkAvailableAuction(){
+    public static void checkAvailableAuction(){
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-M-yyyy hh:mm:ss");            //date format can change according to whole system date format
         System.out.println("Today's date : " + simpleFormat.format(current));
@@ -721,7 +736,7 @@ public class AuctionSystem {
         }
         catch(ParseException e){
         }
-    }*/
+    }
     
     
     public void setBidderCall(Item item, Date biddingTime, Double biddingAmount){
@@ -903,11 +918,41 @@ public class AuctionSystem {
         return currentTime;
     }
     
+    /*public void onGoingAuction(){
+        Date current=new Date();
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        System.out.println("Current Time: "+simpleFormat.format(current));
+        try{            
+            String [] itemData=new String[30];
+            String [] hold=new String[30];
+            Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));
+            System.out.print("Available Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+            while(input.hasNextLine()){
+                String read=input.nextLine();
+                itemData=read.split(",");
+                
+                Date startTime=simpleFormat.parse(itemData[3]);
+                Date endTime=simpleFormat.parse(itemData[4]);//convert String into Date
+
+                if(current.before(endTime)&&current.after(startTime)){
+                    hold = itemData;
+                }
+                System.out.println(calcTab(hold[0])+calcTab(hold[1])+calcTab(hold[2])+calcTab(hold[3])+calcTab(hold[4])+calcTab(hold[5]));
+            }
+            input.close();
+        }
+        catch(FileNotFoundException e){
+            e.getMessage();
+        }
+        catch(ParseException e){
+        }
+    }*/
+    
     public void onGoingAuction(){
         Item holdItem;
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        System.out.println("\nCurrent Time: "+simpleFormat.format(current));
+        System.out.println("Current Time: "+simpleFormat.format(current));
         System.out.print("Available in Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
         for(int i=0; i<itemList.getEntry();i++){
             if(itemList.getItem(i).getKey().before(current)&&itemList.getItem(i).getValue().auctionType.endTime.after(current)){
@@ -922,77 +967,28 @@ public class AuctionSystem {
         Item holdItem;
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("All Auction: ");
-        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Item Description")+calcTab("Auction Start Time")+calcTab("Auction End Time")+calcTab("Auction Type"));
-        //System.out.println("Item Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+        System.out.println("Item Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
         for(int i=0; i<itemList.getEntry();i++){
             holdItem=itemList.getItem(i).getValue();
             System.out.print(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
         }
     }
 
-    public void BiddingList(){
-        /*System.out.println("Item(s) you are currently bidding: ");
-        System.out.println(bidder.biddingList);*/
-        String hold1;
-        Item hold2;
-        System.out.println("\nItem(s) you are currently bidding: ");
-        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Current Highest Bid")+calcTab("Bidder"));
-        for(int i=0;i<bidder.biddingList.size();i++){
-            hold1=bidder.biddingList.get(i);
-            for(int j=0;j<itemList.getEntry();j++){
-                hold2=itemList.getItem(j).getValue();
-                if(hold1.equalsIgnoreCase(hold2.getName()))
-                    System.out.println(calcTab(hold1)+calcTab(Double.toString(hold2.getPrice()))+calcTab(Double.toString(hold2.auctionType.getHighestBid()))+calcTab(hold2.auctionType.bidStack.peek().getValue().getName()));
-            }
-        }
+    public void accessBiddingList(){
+        System.out.println("Item(s) you are currently bidding: ");
+        System.out.println(bidder.biddingList);
     }
 
     public void successBidList(){
-        String hold1;
-        Item hold2;
         System.out.println("Item(s) that "+bidder.getName() +" successfully bid: ");
-        System.out.println(calcTab("Item Name")+calcTab("Item Description")+calcTab("User have to pay (RM)"));
-        for(int i=0;i<bidder.successBidList.size();i++){
-            hold1=bidder.successBidList.get(i);
-            for(int j=0;j<itemList.getEntry();j++){
-                hold2=itemList.getItem(j).getValue();
-                if(hold1.equalsIgnoreCase(hold2.getName()))
-                    System.out.println(calcTab(hold1)+calcTab(hold2.getDescription())+calcTab(Double.toString(bidderHasToPay(hold2))));
-            }
-        }
-    }
-    
-    public Double bidderHasToPay(Item item){
-        Item hold;
-        Double pay=0.00;
-        for(int i=0;i<itemList.getEntry();i++){
-            if(item.equals(itemList.getItem(i).getValue())){
-                hold=itemList.getItem(i).getValue();
-                if(item.auctionType.AuctionType.equalsIgnoreCase("ENGLISH_AUCTION"))
-                    pay = hold.auctionType.getHighestBid();
-                
-                else if(item.auctionType.AuctionType.equalsIgnoreCase("JAPANESE_AUCTION"))
-                    pay = hold.auctionType.getHighestBid();
-                
-                else if(item.auctionType.AuctionType.equalsIgnoreCase("BLIND_AUCTION"))
-                    pay = hold.auctionType.getHighestBid();
-                
-                else if(item.auctionType.AuctionType.equalsIgnoreCase("VICKERY_AUCTION"))
-                    pay = hold.auctionType.bidStack.bidPriceList.get(hold.auctionType.bidStack.bidPriceList.size()-2); //ask if this correct or not
-                
-                else if(item.auctionType.AuctionType.equalsIgnoreCase("RESERVE_AUCTION")){
-                    pay = hold.auctionType.getHighestBid();
-                }
-            }
-        }
-        return pay;
+        System.out.println(bidder.successBidList);
     }
     
     public String calcTab(String s){
         if(s.length()<8)
             return s+"\t\t\t";
         else if(s.length()>8&&s.length()<16)
-            return s+"\t\t";
+            return s+"\t\t\t";
         else if(s.length()>16&&s.length()<24)
             return s+"\t\t";
         else if(s.length()>24&&s.length()<32)
@@ -1148,20 +1144,17 @@ public class AuctionSystem {
         boolean continueMode=true;
         Scanner scan = new Scanner(System.in);
         System.out.println("\n======Bidder Mode======");
-        System.out.print("1. Check ongoing auction\n2. Check bidding auction\n3. Check success bidding\n4. Bid new item\n5. Exit bidder mode\nPlease choose: ");
+        System.out.println("1. Check ongoing auction\\n2. Check bidding auction\\n3. Check success bidding\\n4. Bid new item\\n5. Exit bidder mode\\nPlease choose: ");
         String choice=scan.nextLine();
         switch(choice){
             case "1":
                 onGoingAuction();
-                //DisplayAllAuction();
                 break;
             case "2":
-                //BiddingList();
-                accessBidderBiddingList();
+                accessBiddingList();
                 break;
             case "3":
-                //successBidList();
-                accessBidderEndedList();
+                successBidList();
                 break;
             case "4":
                 bidNewItem();
