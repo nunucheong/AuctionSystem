@@ -365,23 +365,23 @@ public class AuctionSystem {
             System.gc();
             
             read.setWritable(true);
-            read.delete();
-//            if (!read.delete()) {
-//                System.out.println("Could not delete file");
-//                return;
-//            }
-            temp.renameTo(read);
+//            read.delete();
+            if (!read.delete()) {
+                System.out.println("Could not delete file");
+                return;
+            }
+//            temp.renameTo(read);
 
-            //Rename the new file to the filename the original file had.
-//            if (!temp.renameTo(read)){
-//                    System.out.println("Could not rename file");
-//
-//            }
+  //          Rename the new file to the filename the original file had.
+            if (!temp.renameTo(read)){
+                    System.out.println("Could not rename file");
+
+            }
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
         }
         
-        String sellerItemList = null;
+        String sellerItemList = "";
         for(int i = 0; i<seller.itemList.size(); i++){
             Item item = seller.itemList.get(i);
             if(i==seller.itemList.size()-1)
@@ -390,7 +390,7 @@ public class AuctionSystem {
                 sellerItemList = sellerItemList + item.getName() + ":";
         }
         
-        String bidderBiddingList = null;
+        String bidderBiddingList = "";
         for(int i = 0; i<bidder.biddingList.size(); i++){
             String itemName = bidder.biddingList.get(i);
             Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
@@ -399,7 +399,7 @@ public class AuctionSystem {
             else bidderBiddingList = bidderBiddingList + item.getName() + ":";
         }
         
-        String bidderSuccessList = null;
+        String bidderSuccessList = "";
         for(int i = 0; i<bidder.successBidList.size(); i++){
             String itemName = bidder.successBidList.get(i);
             Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
@@ -415,7 +415,7 @@ public class AuctionSystem {
                 count++;
             }
                
-        String record = userData[0] + "," + userData[1] + "," + user.getName() + "," + user.getIC() + "," + user.getPaymentType() + "," + user.getAddress() + "," + user.getPhone() + "," + sellerItemList + "," + bidderBiddingList + "," + bidderSuccessList + ",";
+        String record = userData[0] + "," + userData[1] + "," + user.getName() + "," + user.getIC() + "," + user.getPaymentType() + "," + user.getAddress() + "," + user.getPhone() + "," + sellerItemList + "," + bidderBiddingList + "," + bidderSuccessList + "," + bidder.getBidFrequency();
             
         try{
             PrintWriter inputstream = new PrintWriter (new FileOutputStream ("database/userdatabase.txt", true));
