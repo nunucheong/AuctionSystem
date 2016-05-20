@@ -119,12 +119,15 @@ public class ItemLinkedList<T,E> {
         Pair<T,E> result = null;
         if (index < 0 || index >= entry)
             result = null;
-        else if (index == 0)
+        else if (index == 0){
             result = getFirst();
-        else if (index == entry-1)
+        }
+        else if (index == entry-1){
             result = getLast();
+        }
         else{
             Node node = head;
+            //System.out.println(" ");
             for(int i = 0; i < index; i++){
                 node = node.next;
             }
