@@ -1,2 +1,3 @@
-nunu,999999.0,priceless,06-08-2016 10:00:00,08-08-2016 10:00:00,BlindAuction,null;null;null,null
+itemName,itemPRice,itemDescription,startTIme,endTIme,auctionType,biddingAmount1;bidder;biddingTime,auctionSpecificDetail
+nunu,99.0,priceless,06-08-2016 10:00:00,08-08-2016 10:00:00,BlindAuction,null;null;null,null
 tupperware,34.0,lazy,10-06-2016 10:00:00,12-06-2016 10:00:00,EnglishAuction,null;null;null,2.0
