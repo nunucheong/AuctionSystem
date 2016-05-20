@@ -687,6 +687,8 @@ public class AuctionSystem {
                 break;
         }
         try {
+            newAuction.stTime = startTime;
+            newAuction.enTime = endTime;
             addItem(dateformat.parse(startTime), new Item(itemName, itemPrice, itemDescription, newAuction));
         } catch (ParseException e) {
             System.out.println("Error parsing.in addItem");
@@ -1013,6 +1015,8 @@ public class AuctionSystem {
                 String itemName = array[0];
                 Double itemPrice = Double.parseDouble(array[1]);
                 String itemDescription = array[2];
+                String holdStartTime = array[3];
+                String holdEndTime = array[4];
                 Date startTime1 = dateformat.parse(array[3]);
                 Date endTime1 = dateformat.parse(array[4]);
                 
@@ -1064,6 +1068,8 @@ public class AuctionSystem {
                 }else{
                     auctionTemp = new BlindAuction(itemPrice,biddingStackTemp,startTime1, endTime1);
                 }
+                auctionTemp.stTime = holdStartTime;
+                auctionTemp.enTime = holdEndTime;
                 Item retrieveItem = new Item(itemName, itemPrice,itemDescription, auctionTemp);
                 addItem(startTime1, retrieveItem);
             }       
@@ -1081,7 +1087,7 @@ public class AuctionSystem {
             PrintWriter input = new PrintWriter(new FileOutputStream("database/item.txt",true));
             String dateString;
             
-            input.printf(item.itemName+","+item.itemPrice+","+item.itemDescription+","+dateformat.format(a)+","+dateformat.format(b)+","+item.auctionType.AuctionType+",");
+            input.printf(item.itemName+","+item.itemPrice+","+item.itemDescription+","+item.auctionType.stTime+","+item.auctionType.enTime+","+item.auctionType.AuctionType+",");
             int i = 0;
             
             if(item.auctionType.bidStack.bidPriceList.size() == 0){
