@@ -22,12 +22,11 @@ public class AuctionSystem {
     Bidder bidder;
     Auction newAuction;
     ArrayList<String> bidderEndedBid;
-    static ItemLinkedList<Date,Item> itemList;
+    static ItemLinkedList<Date,Item> itemList = new ItemLinkedList<>();
     SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     Date a;
     Date b;
     public static void main(String[] args) {
-        itemList = new ItemLinkedList<>();
         AuctionSystem system = new AuctionSystem();
         Scanner sc = new Scanner (System.in);
         boolean runProgram = true;
@@ -171,8 +170,9 @@ public class AuctionSystem {
         
         ArrayList<Item> sellerItemList = new ArrayList<>();
         for(String hold : userData[7].split(":")){
-            if (!hold.equals("null"))
+            if (!hold.equals("null")){
                 sellerItemList.add(itemList.getItem(itemList.indexOfItem(hold)).getValue());
+            }
         }
         seller = new Seller (user.getName(), user.getIC(), user.getPaymentType(), user.getAddress(), user.getPhone(), sellerItemList); 
         
@@ -469,9 +469,8 @@ public class AuctionSystem {
             hold = itemList.getItem(i+1);
             i++;
         }
-        System.out.println(i+ " " +item.toString());
         itemList.add(i, date, item);  
-        seller.itemList.add(item);
+        //seller.itemList.add(item);
     }
     
     public boolean sellerMode(){
@@ -511,7 +510,6 @@ public class AuctionSystem {
     public void accessSellerAllItem(){
         ArrayList<Item> allItem = seller.itemList;
         System.out.println("====== Seller All Item ======");
-        System.out.println(seller.itemList.get(0).itemName);
         displayItemList(allItem);
     }
     
@@ -1024,25 +1022,33 @@ public class AuctionSystem {
                 BiddingStack<Double,Bidder, Date> biddingStackTemp = new BiddingStack<>();
                 try{
                     Scanner read1 = new Scanner(new FileInputStream("database/userdatabase.txt"));
-                    int count = 6;
-                    
+                    int count = 6;    
                     while(count<array.length-2){
-                           
-                    while(read1.hasNextLine()){
-                        String[] arrayData = read1.nextLine().split(",");
-                        if(array[count].equalsIgnoreCase(arrayData[2])){
-                        tempBidderObj = new Bidder(arrayData[2],arrayData[3],arrayData[4],arrayData[5],arrayData[6]);
-                         biddingStackTemp.bidderList.add(tempBidderObj);
+                            while(read1.hasNextLine()){
+                                String[] arrayData = read1.nextLine().split(",");
+                                if(array[count].equals("null")){
+                                    break;
+                                }
+                                else{
+                                    if(array[count].equalsIgnoreCase(arrayData[2])){
+                                        tempBidderObj = new Bidder(arrayData[2],arrayData[3],arrayData[4],arrayData[5],arrayData[6]);
+                                        biddingStackTemp.bidderList.add(tempBidderObj);
+                                    }
+                                }
+                            }
+                        count+=3;
                     }
-                    count+=3;
-                    }
-                    }
+                    
                 }catch (FileNotFoundException e){
                         System.out.println("File was not found!");
-                        }
-                biddingStackTemp.bidPriceList.add(Double.parseDouble(array[7]));
-                biddingStackTemp.bidTimeList.add(dateformat.parse(array[8]));
-                 
+                }
+                if(array[7].equals("null") && array[8].equals("null")){
+                    
+                }
+                else{
+                    biddingStackTemp.bidPriceList.add(Double.parseDouble(array[7]));
+                    biddingStackTemp.bidTimeList.add(dateformat.parse(array[8]));
+                }
                
 //                int counter1 = 0;
 //                while(counter1<this.auctionType.bidStack.bidPriceList.size()-1){
@@ -1059,7 +1065,7 @@ public class AuctionSystem {
                     auctionTemp = new BlindAuction(itemPrice,biddingStackTemp,startTime1, endTime1);
                 }
                 Item retrieveItem = new Item(itemName, itemPrice,itemDescription, auctionTemp);
-                itemList.addLast(startTime1, retrieveItem);
+                addItem(startTime1, retrieveItem);
             }       
         }catch(FileNotFoundException a){
             System.out.println("File was not found!");
@@ -1078,18 +1084,22 @@ public class AuctionSystem {
             input.printf(item.itemName+","+item.itemPrice+","+item.itemDescription+","+dateformat.format(a)+","+dateformat.format(b)+","+item.auctionType.AuctionType+",");
             int i = 0;
             
-            
-            while(i < item.auctionType.bidStack.bidPriceList.size()){
-                if(i == item.auctionType.bidStack.bidPriceList.size()-1){
-//                     
-//                     System.out.println(dateString);
-                     input.printf(item.auctionType.bidStack.bidderList.get(i).name+";"+item.auctionType.bidStack.bidPriceList.get(i)+";"+item.auctionType.bidStack.bidTimeList.get(i)+",");
-                }else{                    
-//                     date=dateformat.parse(item.auctionType.bidStack.bidTimeList.get(i).toString());
-////                     dateString = dateformat.format(date);
-//                     System.out.println(dateString);
-                    input.printf(item.auctionType.bidStack.bidderList.get(i).name+";"+item.auctionType.bidStack.bidPriceList.get(i)+";"+item.auctionType.bidStack.bidTimeList.get(i)+";");
-                i++;
+            if(item.auctionType.bidStack.bidPriceList.size() == 0){
+                input.printf("null;null;null,");
+            }
+            else{
+                while(i < item.auctionType.bidStack.bidPriceList.size()){
+                    if(i == item.auctionType.bidStack.bidPriceList.size()-1){
+    //                     
+    //                     System.out.println(dateString);
+                         input.printf(item.auctionType.bidStack.bidderList.get(i).name+";"+item.auctionType.bidStack.bidPriceList.get(i)+";"+item.auctionType.bidStack.bidTimeList.get(i)+",");
+                    }else{                    
+    //                     date=dateformat.parse(item.auctionType.bidStack.bidTimeList.get(i).toString());
+    ////                     dateString = dateformat.format(date);
+    //                     System.out.println(dateString);
+                        input.printf(item.auctionType.bidStack.bidderList.get(i).name+";"+item.auctionType.bidStack.bidPriceList.get(i)+";"+item.auctionType.bidStack.bidTimeList.get(i)+";");
+                    i++;
+                    }
                 }
             }
             if(item.auctionType.AuctionType.equalsIgnoreCase("EnglishAuction")){

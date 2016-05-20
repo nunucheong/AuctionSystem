@@ -1,1 +1,2 @@
-tupperware,23.0,it is a tupperware lel,06-06-2016 10:00:00,08-06-2016 10:00:00,VickeryAuction,null
+nunu,99999.0,priceless,23-06-2016 10:10:10,26-06-2016 10:00:00,EnglishAuction,null;null;null,2.0
+tupperware,23.0,lazy,23-06-2016 10:10:10,26-06-2016 10:00:00,BlindAuction,null;null;null,null
