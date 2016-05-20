@@ -10,6 +10,8 @@ public class Auction {
     private double highestBid;
     protected BiddingStack<Double,Bidder, Date> bidStack;
     protected String AuctionType;
+    protected String stTime;
+    protected String enTime;
     Date startTime;
     Date endTime;
     protected final String ENGLISH_AUCTION = "EnglishAuction";
