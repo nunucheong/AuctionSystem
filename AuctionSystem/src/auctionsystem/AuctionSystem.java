@@ -241,7 +241,6 @@ public class AuctionSystem {
                     String choice2 = sc.nextLine();
                     edit = editor(choice2); 
                     }
-                    updateUserdatabase(checkUserIdPosition(username));
                     manageProfile = true;
                     break;
                 
@@ -341,7 +340,7 @@ public class AuctionSystem {
     }    
     
     public void updateUserdatabase(int delete){
-        String deleted=null;
+        String deleted= null;
         try{
             File temp = new File("database/temp.txt");
             File read = new File("database/userdatabase.txt");
@@ -365,47 +364,60 @@ public class AuctionSystem {
             System.gc();
             
             read.setWritable(true);
-//            read.delete();
-            if (!read.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-//            temp.renameTo(read);
+            read.delete();
+//            if (!read.delete()) {
+//                System.out.println("Could not delete file");
+//                return;
+//            }
+            temp.renameTo(read);
 
   //          Rename the new file to the filename the original file had.
-            if (!temp.renameTo(read)){
-                    System.out.println("Could not rename file");
-
-            }
+//            if (!temp.renameTo(read)){
+//                    System.out.println("Could not rename file");
+//
+//            }
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
         }
         
         String sellerItemList = "";
-        for(int i = 0; i<seller.itemList.size(); i++){
-            Item item = seller.itemList.get(i);
-            if(i==seller.itemList.size()-1)
-                sellerItemList = sellerItemList + item.getName();
-            else
-                sellerItemList = sellerItemList + item.getName() + ":";
+        if(seller.itemList.size() == 0)
+            sellerItemList = "null";
+        else{
+            for(int i = 0; i<seller.itemList.size(); i++){
+                Item item = seller.itemList.get(i);
+                if(i==seller.itemList.size()-1)
+                    sellerItemList = sellerItemList + item.getName();
+                else
+                    sellerItemList = sellerItemList + item.getName() + ":";
+            }
         }
         
+        
         String bidderBiddingList = "";
-        for(int i = 0; i<bidder.biddingList.size(); i++){
-            String itemName = bidder.biddingList.get(i);
-            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
-            if(i==bidder.biddingList.size()-1)
-                bidderBiddingList = bidderBiddingList + item.getName();
-            else bidderBiddingList = bidderBiddingList + item.getName() + ":";
+        if(bidder.biddingList.size()==0)
+            bidderBiddingList = "null";
+        else{
+            for(int i = 0; i<bidder.biddingList.size(); i++){
+                String itemName = bidder.biddingList.get(i);
+                Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+                if(i==bidder.biddingList.size()-1)
+                    bidderBiddingList = bidderBiddingList + item.getName();
+                else bidderBiddingList = bidderBiddingList + item.getName() + ":";
+            }
         }
         
         String bidderSuccessList = "";
-        for(int i = 0; i<bidder.successBidList.size(); i++){
-            String itemName = bidder.successBidList.get(i);
-            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
-            if(i==bidder.successBidList.size()-1)
-                bidderSuccessList = bidderSuccessList + item.getName();
-            else bidderSuccessList = bidderSuccessList + item.getName() + ":";
+        if(bidder.successBidList.size()==0)
+            bidderSuccessList = "null";
+        else{
+            for(int i = 0; i<bidder.successBidList.size(); i++){
+                String itemName = bidder.successBidList.get(i);
+                Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+                if(i==bidder.successBidList.size()-1)
+                    bidderSuccessList = bidderSuccessList + item.getName();
+                else bidderSuccessList = bidderSuccessList + item.getName() + ":";
+            }
         }
         
         String[] userData = new String[11];
@@ -449,14 +461,16 @@ public class AuctionSystem {
             System.gc();
             
             read.setWritable(true);
-            if (!read.delete()) {
-                System.out.println("Could not delete file");
-                return;
-            }
-            //Rename the new file to the filename the original file had.
-            if (!temp.renameTo(read)){
-                    System.out.println("Could not rename file");
-            }
+            read.delete();
+            temp.renameTo(read);
+//            if (!read.delete()) {
+//                System.out.println("Could not delete file");
+//                return;
+//            }
+//            //Rename the new file to the filename the original file had.
+//            if (!temp.renameTo(read)){
+//                    System.out.println("Could not rename file");
+//            }
         }catch (IOException e){
             System.out.println("Error writing to temporary file.");
         }
@@ -509,7 +523,7 @@ public class AuctionSystem {
     
     public void accessSellerAllItem(){
         ArrayList<Item> allItem = seller.itemList;
-        System.out.println("====== Seller All Item ======");
+        System.out.println("\n====== Seller All Item ======");
         displayItemList(allItem);
     }
     
@@ -639,7 +653,7 @@ public class AuctionSystem {
         String choice = sc.nextLine();
         switch(choice){
             case "1":
-                System.out.print("\nMinimum exceed amount: ");
+                System.out.print("\nMinimum exceed amount: RM");
                 double minExceed = sc.nextDouble();
                 try{
                     a = dateformat.parse(startTime);
@@ -689,7 +703,9 @@ public class AuctionSystem {
         try {
             newAuction.stTime = startTime;
             newAuction.enTime = endTime;
-            addItem(dateformat.parse(startTime), new Item(itemName, itemPrice, itemDescription, newAuction));
+            Item newItem = new Item(itemName, itemPrice, itemDescription, newAuction);
+            addItem(dateformat.parse(startTime), newItem);
+            seller.itemList.add(newItem);
         } catch (ParseException e) {
             System.out.println("Error parsing.in addItem");
         }
