@@ -902,42 +902,13 @@ public class AuctionSystem {
         return currentTime;
     }
     
-    /*public void onGoingAuction(){
-        Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        System.out.println("Current Time: "+simpleFormat.format(current));
-        try{            
-            String [] itemData=new String[30];
-            String [] hold=new String[30];
-            Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));
-            System.out.print("Available Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
-            while(input.hasNextLine()){
-                String read=input.nextLine();
-                itemData=read.split(",");
-                
-                Date startTime=simpleFormat.parse(itemData[3]);
-                Date endTime=simpleFormat.parse(itemData[4]);//convert String into Date
-
-                if(current.before(endTime)&&current.after(startTime)){
-                    hold = itemData;
-                }
-                System.out.println(calcTab(hold[0])+calcTab(hold[1])+calcTab(hold[2])+calcTab(hold[3])+calcTab(hold[4])+calcTab(hold[5]));
-            }
-            input.close();
-        }
-        catch(FileNotFoundException e){
-            e.getMessage();
-        }
-        catch(ParseException e){
-        }
-    }*/
-    
     public void onGoingAuction(){
         Item holdItem;
         Date current=new Date();
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("Current Time: "+simpleFormat.format(current));
-        System.out.print("Available in Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+        System.out.println("Available in Auction(s): ");
+        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Item Description")+calcTab("Auction Start Time")+calcTab("Auction End Time")+calcTab("Auction Type"));
         for(int i=0; i<itemList.getEntry();i++){
             if(itemList.getItem(i).getKey().before(current)&&itemList.getItem(i).getValue().auctionType.endTime.after(current)){
                 holdItem=itemList.getItem(i).getValue();
@@ -951,7 +922,7 @@ public class AuctionSystem {
         Item holdItem;
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("All Auction: ");
-        System.out.println("Item Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Item Description")+calcTab("Auction Start Time")+calcTab("Auction End Time")+calcTab("Auction Type"));
         for(int i=0; i<itemList.getEntry();i++){
             holdItem=itemList.getItem(i).getValue();
             System.out.print(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
@@ -964,8 +935,45 @@ public class AuctionSystem {
     }
 
     public void successBidList(){
+        String hold1;
+        Item hold2;
+        SimpleDateFormat simpleFormat=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         System.out.println("Item(s) that "+bidder.getName() +" successfully bid: ");
-        System.out.println(bidder.successBidList);
+        System.out.println(calcTab("Item Name")+calcTab("End Time")+calcTab("User have to pay (RM)"));
+        for(int i=0;i<bidder.successBidList.size();i++){
+            hold1=bidder.successBidList.get(i);
+            for(int j=0;j<itemList.getEntry();j++){
+                hold2=itemList.getItem(j).getValue();
+                if(hold1.equalsIgnoreCase(hold2.getName()))
+                    System.out.println(calcTab(hold1)+calcTab(simpleFormat.format(hold2.auctionType.endTime))+calcTab(Double.toString(bidderHasToPay(hold2))));
+            }
+        }
+    }
+    
+    public Double bidderHasToPay(Item item){
+        Item hold;
+        Double pay=0.00;
+        for(int i=0;i<itemList.getEntry();i++){
+            if(item.equals(itemList.getItem(i).getValue())){
+                hold=itemList.getItem(i).getValue();
+                if(item.auctionType.AuctionType.equalsIgnoreCase("ENGLISH_AUCTION"))
+                    pay = hold.auctionType.getHighestBid();
+                
+                else if(item.auctionType.AuctionType.equalsIgnoreCase("JAPANESE_AUCTION"))
+                    pay = hold.auctionType.getHighestBid();
+                
+                else if(item.auctionType.AuctionType.equalsIgnoreCase("BLIND_AUCTION"))
+                    pay = hold.auctionType.getHighestBid();
+                
+                else if(item.auctionType.AuctionType.equalsIgnoreCase("VICKERY_AUCTION"))
+                    pay = hold.auctionType.bidStack.bidPriceList.get(hold.auctionType.bidStack.bidPriceList.size()-2); //ask if this correct or not
+                
+                else if(item.auctionType.AuctionType.equalsIgnoreCase("RESERVE_AUCTION")){
+                    pay = hold.auctionType.getHighestBid();
+                }
+            }
+        }
+        return pay;
     }
     
     public String calcTab(String s){
@@ -979,7 +987,6 @@ public class AuctionSystem {
             return s+"\t";
         else return s+"\t";
     }
-
     
     public void bidNewItem(){
         onGoingAuction();
@@ -1086,7 +1093,7 @@ public class AuctionSystem {
                      input.printf(item.auctionType.bidStack.bidderList.get(i).name+";"+item.auctionType.bidStack.bidPriceList.get(i)+";"+item.auctionType.bidStack.bidTimeList.get(i)+",");
                 }else{                    
 //                     date=dateformat.parse(item.auctionType.bidStack.bidTimeList.get(i).toString());
-////                     dateString = dateformat.format(date);
+//                     dateString = dateformat.format(date);
 //                     System.out.println(dateString);
                     input.printf(item.auctionType.bidStack.bidderList.get(i).name+";"+item.auctionType.bidStack.bidPriceList.get(i)+";"+item.auctionType.bidStack.bidTimeList.get(i)+";");
                 i++;
