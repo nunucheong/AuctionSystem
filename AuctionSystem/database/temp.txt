@@ -1,0 +1,5 @@
+userId,password,name,ic,payment,address,phone,ItemList:itemNameA:itemNameB:itemNameC,BiddingList:itemNameA:itemNameB,SuccessBidList:itemNameA:itemNameB,bidFrequency
+khoo,1234,Khoo Bao Xuan,123456,paypal,kjdfjnvnv,12345,null,null,null,0
+z2,2,wang,961231,Credit Card,a306 kk8,123456,ipad pro 9.7,null,null,0
+abc,123,wzq,123456,web,12,32,def:tablet:tablet:nexus 9,null,null,0
+nunu,cw,chahwei,960910075047,paypal,f212,0123701243,nunu:tupperware,tupperware:def,null,0

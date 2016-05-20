@@ -51,11 +51,21 @@ public class AuctionSystem {
                     System.out.print("Please enter your username: ");
                     username = sc.nextLine();
                     logStatus = system.logIn(username);
+<<<<<<< HEAD
+                    if(logStatus) {
+                        //create new user object
+                        System.out.println("Welcome back " + username);
+                    }
+                                                      
+                    logIn:
+                    while(logStatus){
+=======
                     if(logStatus)
                         System.out.println("Welcome back " + username);                              
                     logIn:
                     while(logStatus){
                         //create new user object
+>>>>>>> refs/remotes/origin/zq2
                         system.readUserProfile(username);
                         system.checkBiddingList();
                         boolean selectMode = true;
@@ -317,7 +327,11 @@ public class AuctionSystem {
     
     public int checkUserIdPosition(String userId){
         int count = 1;
+<<<<<<< HEAD
+        int here =0;
+=======
         int here=0;
+>>>>>>> refs/remotes/origin/zq2
         try{
             Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
@@ -328,7 +342,11 @@ public class AuctionSystem {
                 for(String hold : check.split(",")){
                     userIdCheck[i] = hold;
                     if(userIdCheck[i].equals(userId)){
+<<<<<<< HEAD
+                        here=count;
+=======
                         here = count;
+>>>>>>> refs/remotes/origin/zq2
                     }
                     i++;
                     break;
@@ -637,6 +655,17 @@ public class AuctionSystem {
     }
     
     public void accessBidderBiddingList(){
+<<<<<<< HEAD
+        System.out.println("\n====== Bidding Auction ======");
+        Date currentDate = new Date();
+        System.out.println("Current Time: "+dateformat.format(currentDate));
+        System.out.println("All Auction: ");
+        System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
+        for(int i = 0; i<bidder.biddingList.size(); i++){
+            String itemName = bidder.biddingList.get(i);
+            Item item = itemList.getItem(itemList.indexOfItem(itemName)).getValue();
+            System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).startTime+"")+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType+""));
+=======
         System.out.println("====== Bidding Auction ======");
         if(bidder.biddingList.isEmpty())
             System.out.println("No item.");
@@ -654,6 +683,7 @@ public class AuctionSystem {
                 else
                     System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType)+calcTab(item.auctionType.getHighestBid()+"")+calcTab(item.auctionType.bidStack.peek().getValue().getName()));
             }
+>>>>>>> refs/remotes/origin/zq2
         }
     }
     
@@ -747,34 +777,6 @@ public class AuctionSystem {
             System.out.println("Error parsing.in addItem");
         }
     }
-    
-    public static void checkAvailableAuction(){
-        Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-M-yyyy hh:mm:ss");            //date format can change according to whole system date format
-        System.out.println("Today's date : " + simpleFormat.format(current));
-        ArrayList availAuction=new ArrayList();
-        try{
-            String [] split=new String[30];
-            Scanner input=new Scanner(new FileInputStream("d:/AuctionSystem.txt"));   //just replace the correct text file
-            while(input.hasNextLine()){
-                String read=input.nextLine();
-                split=read.split(",");                                                //change the appropriate separate-character
-                
-                Date endTime=simpleFormat.parse(split[2]);                            //convert String into Date
-                
-                if(current.before(endTime))
-                    availAuction.add(split[0]);                                       // split[0] , I assume item name is in first place
-            }
-            System.out.println("Available Auction(s): "+availAuction.toString());     // this availAuction arraylist will only show available item to bid.
-            input.close();
-        }
-        catch(FileNotFoundException e){
-            e.getMessage();
-        }
-        catch(ParseException e){
-        }
-    }
-    
     
     public void setBidderCall(Item item, Date biddingTime, Double biddingAmount){
         //English Auction 
@@ -924,14 +926,12 @@ public class AuctionSystem {
                      }
                  }
              }
-            
         }catch(FileNotFoundException e){
             System.out.println("File was not found!");
         }catch(ParseException f){
             System.out.println("Error Parsing!");
         }
     }
-     
      public String bidderStatus(Bidder bidder){
         int freq = bidder.getBidFrequency();
         String status;
@@ -947,60 +947,35 @@ public class AuctionSystem {
         return status;
     }
     
-    public static String formatTime(){
-        Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        String currentTime=simpleFormat.format(current);
-        return currentTime;
-    }
-    
-    /*public void onGoingAuction(){
-        Date current=new Date();
-        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        System.out.println("Current Time: "+simpleFormat.format(current));
-        try{            
-            String [] itemData=new String[30];
-            String [] hold=new String[30];
-            Scanner input=new Scanner(new FileInputStream("itemdatabase.txt"));
-            System.out.print("Available Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
-            while(input.hasNextLine()){
-                String read=input.nextLine();
-                itemData=read.split(",");
-                
-                Date startTime=simpleFormat.parse(itemData[3]);
-                Date endTime=simpleFormat.parse(itemData[4]);//convert String into Date
-
-                if(current.before(endTime)&&current.after(startTime)){
-                    hold = itemData;
-                }
-                System.out.println(calcTab(hold[0])+calcTab(hold[1])+calcTab(hold[2])+calcTab(hold[3])+calcTab(hold[4])+calcTab(hold[5]));
-            }
-            input.close();
-        }
-        catch(FileNotFoundException e){
-            e.getMessage();
-        }
-        catch(ParseException e){
-        }
-    }*/
-    
     public void onGoingAuction(){
         Item holdItem;
         Date current=new Date();
+        Scanner kb=new Scanner(System.in);
         SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        System.out.println("Current Time: "+simpleFormat.format(current));
-        System.out.print("Available in Auction(s): \nItem Name \t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type\n");
+        System.out.println("\nCurrent Time: "+simpleFormat.format(current));
+        System.out.println("Available in Auction: ");
+        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Item Description")+calcTab("Start Time")+calcTab("End Time")+calcTab("Type"));
         for(int i=0; i<itemList.getEntry();i++){
             if(itemList.getItem(i).getKey().before(current)&&itemList.getItem(i).getValue().auctionType.endTime.after(current)){
                 holdItem=itemList.getItem(i).getValue();
-                System.out.print(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
+                System.out.println(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
             }
         }
         System.out.println();
     }
     
-    public void DisplayAllAuction(){
+    public void displayAllAuction(){
+        Date current=new Date();
         Item holdItem;
+<<<<<<< HEAD
+        SimpleDateFormat simpleFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        System.out.println("\nAll Auction: ");
+        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Item Description")+calcTab("Start Time")+calcTab("End Time")+calcTab("Type"));
+        for(int i=0; i<itemList.getEntry();i++){
+            holdItem=itemList.getItem(i).getValue();
+            if(current.before(holdItem.auctionType.endTime))
+                System.out.println(calcTab(holdItem.getName())+calcTab(Double.toString(holdItem.getPrice()))+calcTab(holdItem.getDescription())+calcTab(simpleFormat.format(holdItem.auctionType.startTime))+calcTab(simpleFormat.format(holdItem.auctionType.endTime))+calcTab(holdItem.auctionType.AuctionType));
+=======
         if(itemList.getEntry()==0)
             System.out.println("No item.");
         else{
@@ -1027,9 +1002,10 @@ public class AuctionSystem {
                 if(hold1.equalsIgnoreCase(hold2.getName()))
                     System.out.println(calcTab(hold1)+calcTab(Double.toString(hold2.getPrice()))+calcTab(Double.toString(hold2.auctionType.getHighestBid())+" by ")+calcTab(hold2.auctionType.bidStack.peek().getValue().getName()));
             }
+>>>>>>> refs/remotes/origin/zq2
         }
     }
-
+    
     public void successBidList(){
         String hold1;
         Item hold2;
@@ -1040,7 +1016,7 @@ public class AuctionSystem {
             for(int j=0;j<itemList.getEntry();j++){
                 hold2=itemList.getItem(j).getValue();
                 if(hold1.equalsIgnoreCase(hold2.getName()))
-                    System.out.println(calcTab(hold1)+calcTab(hold2.getDescription())+calcTab(Double.toString(bidderHasToPay(hold2))));
+                    System.out.println(calcTab(hold1)+calcTab(hold2.getDescription())+calcTab(Double.toString(bidderTotalPendingPayment())));
             }
         }
     }
@@ -1056,19 +1032,50 @@ public class AuctionSystem {
             return s+"\t";
         else return s+"\t";
     }
-
     
-    public void bidNewItem(){
-        onGoingAuction();
-        Scanner scan = new Scanner(System.in);
-        String choice=scan.nextLine();
-        for(int i=0;i<itemList.getEntry();i++){
-            if(choice.equalsIgnoreCase(itemList.getItem(i).getValue().getName())){
-                bidder.biddingList.add(itemList.getItem(i).getValue().getName());
+    public void registerNewItem(){
+        String choice;
+        
+        do{
+            Scanner scan = new Scanner(System.in);
+            System.out.print("Choose item to bid [Enter 0 to cancel]: ");
+            choice=scan.nextLine();
+            if(choice.equals("0"))
+                break;
+            test:
+            for(int i=0;i<itemList.getEntry();i++){
+                if(choice.equalsIgnoreCase(itemList.getItem(i).getValue().getName())){
+                    Item hold = itemList.getItem(i).getValue();
+                    if(hold.auctionType.bidStack.bidPriceList.isEmpty()){
+                        System.out.println("This item is currently no user bidding.");
+                    }
+                        
+                    else{
+                        System.out.println("Current highest bid: "+itemList.getItem(i).getValue().auctionType.getHighestBid()+" by "+itemList.getItem(i).getValue().auctionType.bidStack.peek().getValue().getName());
+                    }
+                        System.out.print("Continue to bid?[Y/n] : ");
+                        Scanner kb2=new Scanner(System.in);
+                        String reply=kb2.nextLine();
+                        if(reply.equalsIgnoreCase("y")){
+                            if(bidder.biddingList.contains(hold.getName())){
+                                System.out.println("This item has already been registered into your bidding list.");  
+                            }
+                            else{
+                                bidder.biddingList.add(itemList.getItem(i).getValue().getName());
+                                System.out.println(itemList.getItem(i).getValue().getName()+" is registered to your bidding list.");
+                                System.out.println("Your bidding items : "+bidder.biddingList.toString());
+                            }
+                            break test;
+                        }
+                        else if(reply.equalsIgnoreCase("n")){
+                            break test;
+                        }
+                }
+                //else
+                    //System.out.println("Item you choose not available.");
             }
-            else
-                System.out.println("Item not available.");
         }
+        while(!choice.equalsIgnoreCase("0"));
     }
     
     public void write(){
@@ -1178,7 +1185,7 @@ public class AuctionSystem {
                          input.printf(item.auctionType.bidStack.bidderList.get(i).name+";"+item.auctionType.bidStack.bidPriceList.get(i)+";"+item.auctionType.bidStack.bidTimeList.get(i)+",");
                     }else{                    
     //                     date=dateformat.parse(item.auctionType.bidStack.bidTimeList.get(i).toString());
-    ////                     dateString = dateformat.format(date);
+    //                     dateString = dateformat.format(date);
     //                     System.out.println(dateString);
                         input.printf(item.auctionType.bidStack.bidderList.get(i).name+";"+item.auctionType.bidStack.bidPriceList.get(i)+";"+item.auctionType.bidStack.bidTimeList.get(i)+";");
                     i++;
@@ -1205,51 +1212,25 @@ public class AuctionSystem {
         boolean continueMode=true;
         Scanner scan = new Scanner(System.in);
         System.out.println("\n======Bidder Mode======");
-        System.out.println("1. Check ongoing auction\\n2. Check bidding auction\\n3. Check success bidding\\n4. Bid new item\\n5. Exit bidder mode\\nPlease choose: ");
+        System.out.print("1. Display All Auction\n2. Check My Bidding List\n3. Display Ongoing Auction\n4. Exit bidder mode\nPlease choose: ");
         String choice=scan.nextLine();
         switch(choice){
             case "1":
-                onGoingAuction();
+                displayAllAuction();
+                registerNewItem();
                 break;
             case "2":
-                accessBiddingList();
+                //accessBiddingList();
+                accessBidderBiddingList();
                 break;
             case "3":
-                successBidList();
+                onGoingAuction();
                 break;
             case "4":
-                bidNewItem();
-            case "5":
                 continueMode=false;
             default:
                 System.out.print("Invalid input. Please enter again:");
         }
         return continueMode;
-    }
-    
-    public Double bidderHasToPay(Item item){
-        Item hold;
-        Double pay=0.00;
-        for(int i=0;i<itemList.getEntry();i++){
-            if(item.equals(itemList.getItem(i).getValue())){
-                hold=itemList.getItem(i).getValue();
-                if(item.auctionType.AuctionType.equalsIgnoreCase("ENGLISH_AUCTION"))
-                    pay = hold.auctionType.getHighestBid();
-                
-                else if(item.auctionType.AuctionType.equalsIgnoreCase("JAPANESE_AUCTION"))
-                    pay = hold.auctionType.getHighestBid();
-                
-                else if(item.auctionType.AuctionType.equalsIgnoreCase("BLIND_AUCTION"))
-                    pay = hold.auctionType.getHighestBid();
-                
-                else if(item.auctionType.AuctionType.equalsIgnoreCase("VICKERY_AUCTION"))
-                    pay = hold.auctionType.bidStack.bidPriceList.get(hold.auctionType.bidStack.bidPriceList.size()-2); //ask if this correct or not
-                
-                else if(item.auctionType.AuctionType.equalsIgnoreCase("RESERVE_AUCTION")){
-                    pay = hold.auctionType.getHighestBid();
-                }
-            }
-        }
-        return pay;
     }
 }
