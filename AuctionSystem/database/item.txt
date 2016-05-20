@@ -1,2 +1,9 @@
 nunu,999999.0,priceless,06-08-2016 10:00:00,08-08-2016 10:00:00,BlindAuction,null;null;null,null
+abcc,123.0,bdcc,20-06-2016 10:00:00,22-06-2016 10:00:00,EnglishAuction,null;null;null,3.0
+tablet,30.0,tab,20-06-2016 00:00:00,25-06-2016 00:00:00,BlindAuction,null;null;null,null
 tupperware,34.0,lazy,10-06-2016 10:00:00,12-06-2016 10:00:00,EnglishAuction,null;null;null,2.0
+ipad pro 9.7,30.0,tablet lo,20-05-2016 00:00:00,20-05-2016 23:59:59,EnglishAuction,null;null;null,30.0
+Ipad Pro (.7,2099.0,tablet,20-05-2016 00:00:00,20-05-2016 23:59:59,EnglishAuction,null;null;null,10.0
+tablet,500.0,tabtabtab,20-16-2015 00:00:00,26-06-2015 00:00:00,VickeryAuction,null;null;null,null
+nexus 9,700.0,tablet,20-02-2016 00:00:00,26-06-2016 00:00:00,EnglishAuction,null;null;null,6.0
+def,32.0,654,20-06-2015 00:00:00,26-05-2016 00:00:00,EnglishAuction,null;null;null,2.0
