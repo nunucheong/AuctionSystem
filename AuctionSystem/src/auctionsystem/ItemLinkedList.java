@@ -151,13 +151,14 @@ public class ItemLinkedList<T,E> {
     
     //not sure the use of this 
     public int indexOfItem(String name){
-        int index = 1;
+        int index = 0;
         boolean found = false;
         Node current = head;
-        while(!found && current!=null){
+        while(!found && current!=null){            
             if (name.equals(current.item.toString()))
                 found = true;
-            index++;
+            else
+                index++;
             current = current.next;
         }
         if (found)
