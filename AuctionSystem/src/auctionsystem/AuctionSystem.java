@@ -975,13 +975,33 @@ public class AuctionSystem {
     }
 
     public void accessBiddingList(){
+        String hold1;
+        Item hold2;
         System.out.println("Item(s) you are currently bidding: ");
-        System.out.println(bidder.biddingList);
+        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Current Highest Bid")+calcTab("Bidder"));
+        for(int i=0;i<bidder.biddingList.size();i++){
+            hold1=bidder.biddingList.get(i);
+            for(int j=0;j<itemList.getEntry();j++){
+                hold2=itemList.getItem(j).getValue();
+                if(hold1.equalsIgnoreCase(hold2.getName()))
+                    System.out.println(calcTab(hold1)+calcTab(Double.toString(hold2.getPrice()))+calcTab(Double.toString(hold2.auctionType.getHighestBid())+" by ")+calcTab(hold2.auctionType.bidStack.peek().getValue().getName()));
+            }
+        }
     }
 
     public void successBidList(){
+        String hold1;
+        Item hold2;
         System.out.println("Item(s) that "+bidder.getName() +" successfully bid: ");
-        System.out.println(bidder.successBidList);
+        System.out.println(calcTab("Item Name")+calcTab("Item Description")+calcTab("User have to pay (RM)"));
+        for(int i=0;i<bidder.successBidList.size();i++){
+            hold1=bidder.successBidList.get(i);
+            for(int j=0;j<itemList.getEntry();j++){
+                hold2=itemList.getItem(j).getValue();
+                if(hold1.equalsIgnoreCase(hold2.getName()))
+                    System.out.println(calcTab(hold1)+calcTab(hold2.getDescription())+calcTab(Double.toString(bidderHasToPay(hold2))));
+            }
+        }
     }
     
     public String calcTab(String s){
@@ -1164,5 +1184,31 @@ public class AuctionSystem {
                 System.out.print("Invalid input. Please enter again:");
         }
         return continueMode;
+    }
+    
+    public Double bidderHasToPay(Item item){
+        Item hold;
+        Double pay=0.00;
+        for(int i=0;i<itemList.getEntry();i++){
+            if(item.equals(itemList.getItem(i).getValue())){
+                hold=itemList.getItem(i).getValue();
+                if(item.auctionType.AuctionType.equalsIgnoreCase("ENGLISH_AUCTION"))
+                    pay = hold.auctionType.getHighestBid();
+                
+                else if(item.auctionType.AuctionType.equalsIgnoreCase("JAPANESE_AUCTION"))
+                    pay = hold.auctionType.getHighestBid();
+                
+                else if(item.auctionType.AuctionType.equalsIgnoreCase("BLIND_AUCTION"))
+                    pay = hold.auctionType.getHighestBid();
+                
+                else if(item.auctionType.AuctionType.equalsIgnoreCase("VICKERY_AUCTION"))
+                    pay = hold.auctionType.bidStack.bidPriceList.get(hold.auctionType.bidStack.bidPriceList.size()-2); //ask if this correct or not
+                
+                else if(item.auctionType.AuctionType.equalsIgnoreCase("RESERVE_AUCTION")){
+                    pay = hold.auctionType.getHighestBid();
+                }
+            }
+        }
+        return pay;
     }
 }
