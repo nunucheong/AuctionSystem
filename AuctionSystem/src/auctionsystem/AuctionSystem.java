@@ -51,12 +51,13 @@ public class AuctionSystem {
                     System.out.print("Please enter your username: ");
                     username = sc.nextLine();
                     logStatus = system.logIn(username);
-                    if(logStatus)                         
+                    if(logStatus) 
+                        //create new user object
+                        system.readUserProfile(username);
+                        system.checkBiddingList();
                         System.out.println("Welcome back " + username);                              
                     logIn:
                     while(logStatus){
-                        //create new user object
-                        system.readUserProfile(username);
                         boolean selectMode = true;
                         mode:
                         while (selectMode){
@@ -87,7 +88,6 @@ public class AuctionSystem {
                                 
                                 //Log out system back to main menu    
                                 case "4":
-                                    system.checkBiddingList();
                                     system.updateUserdatabase(system.checkUserIdPosition(username));
                                     logStatus = false;
                                     break logIn;
