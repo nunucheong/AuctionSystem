@@ -152,7 +152,6 @@ public class AuctionSystem {
             Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
             int line = checkUserIdPosition(userId);
-            System.out.println(line);
             while(inputstream.hasNextLine()){
                 i++;
                 String check = inputstream.nextLine();
@@ -1047,13 +1046,13 @@ public class AuctionSystem {
     }
     
     public String calcTab(String s){
-        if(s.length()<8)
+        if(s.length()<=4)
             return s+"\t\t\t";
-        else if(s.length()>8&&s.length()<16)
+        else if(s.length()>4&&s.length()<8)
             return s+"\t\t\t";
-        else if(s.length()>16&&s.length()<24)
+        else if(s.length()>=8&&s.length()<16)
             return s+"\t\t";
-        else if(s.length()>24&&s.length()<32)
+        else if(s.length()>=16&&s.length()<24)
             return s+"\t";
         else return s+"\t";
     }
