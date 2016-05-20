@@ -152,6 +152,7 @@ public class AuctionSystem {
             Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
             int line = checkUserIdPosition(userId);
+            System.out.println(line);
             while(inputstream.hasNextLine()){
                 i++;
                 String check = inputstream.nextLine();
@@ -317,6 +318,7 @@ public class AuctionSystem {
     
     public int checkUserIdPosition(String userId){
         int count = 1;
+        int here=0;
         try{
             Scanner inputstream = new Scanner (new FileInputStream("database/userdatabase.txt"));
             int i = 0;
@@ -327,7 +329,7 @@ public class AuctionSystem {
                 for(String hold : check.split(",")){
                     userIdCheck[i] = hold;
                     if(userIdCheck[i].equals(userId)){
-                        break checkLine;
+                        here = count;
                     }
                     i++;
                     break;
@@ -337,7 +339,7 @@ public class AuctionSystem {
         }catch (IOException e){
             System.out.println("User id not found.");
         }
-        return count;    
+        return here;    
     }    
     
     public void updateUserdatabase(int delete){
@@ -571,14 +573,13 @@ public class AuctionSystem {
                     else
                         System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).startTime+"")+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType)+calcTab(item.auctionType.bidStack.peek().getValue().getName())+calcTab(item.auctionType.getHighestBid()+"")+calcTab(item.auctionType.bidStack.bidTimeList.size()+""));
             }
-        }
-        
+        }    
     }
     
     public void displayItemList(ArrayList<Item> list){
         Date currentDate = new Date();
         System.out.println("Current Time: " + dateformat.format(currentDate));
-        System.out.println("\nItem Name\t\tItem Price\t\tItem Description\t\tAuction Start Time\t\tAuction End Time\t\tAuction Type");
+        System.out.println(calcTab("Item Name")+calcTab("Item Price")+calcTab("Item Description")+calcTab("Auction Start Time")+calcTab("Auction End Time")+calcTab("Auction Type"));
         for(int i = 0; i<list.size(); i++){
             Item item = list.get(i);
             System.out.println(calcTab(item.getName())+calcTab(item.getPrice()+"")+calcTab(item.getDescription())+calcTab((item.auctionType).startTime+"")+calcTab((item.auctionType).endTime+"")+calcTab(item.auctionType.AuctionType+""));
@@ -820,7 +821,6 @@ public class AuctionSystem {
             String[]copyFromText = new String[6];
             int counter2 = 0;
         try{
-        
             Scanner input = new Scanner(new FileInputStream("itemdatabase.txt"));
             SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
             while(input.hasNextLine()){
