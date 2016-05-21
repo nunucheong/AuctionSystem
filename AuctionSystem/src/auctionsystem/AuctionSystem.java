@@ -1244,6 +1244,7 @@ public class AuctionSystem {
         return continueMode;
     }
     
+    
     /*public Double bidderHasToPay(Item item){
         Item hold;
         Double pay=0.00;
